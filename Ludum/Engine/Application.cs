@@ -5,11 +5,7 @@
 		private static Scene scene;
 		public static Scene Scene
 		{
-			get
-			{
-				if (scene == null) scene = new Scene();
-				return scene;
-			}
+			get { return scene ?? (scene = new Scene()); }
 		}
 	}
 }

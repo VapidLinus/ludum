@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using SFML.Graphics;
-using SFML.Window;
 
 namespace Ludum.Engine
 {
@@ -11,31 +10,31 @@ namespace Ludum.Engine
 		{
 			// Load
 			Console.Write("Initializing... ");
-			OnInitialize();			
+			OnInitialize();
 			Console.WriteLine("Done!");
 			Console.Write("Loading content... ");
 			OnLoadContent();
 			Console.WriteLine("Done!");
 
 			// Update
-			Stopwatch timer = Stopwatch.StartNew();
-			Stopwatch fpsHelper = Stopwatch.StartNew();
+			var timer = Stopwatch.StartNew();
+			double time = 0;
 			int frames = 0;
 			while (Render.Window.IsOpen())
 			{
+				// Record delta
+				double delta = timer.ElapsedMilliseconds;
+				timer.Restart();
+
 				frames++;
 
 				// Count fps
-				if (fpsHelper.ElapsedMilliseconds > 1000)
+				if ((time += delta) > 1000)
 				{
 					Console.WriteLine("FPS: " + frames);
-					fpsHelper.Restart();
+					time = 0;
 					frames = 0;
 				}
-
-				// Record delta
-				float delta = timer.ElapsedMilliseconds;
-				timer.Restart();
 
 				// Handle window
 				Render.Window.DispatchEvents();
@@ -43,7 +42,7 @@ namespace Ludum.Engine
 				Render.Window.Display();
 
 				// Update
-				OnUpdate(delta);
+				OnUpdate((float)delta);
 				OnRender();
 			}
 

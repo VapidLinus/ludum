@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Ludum.Engine
+﻿namespace Ludum.Engine
 {
 	public delegate void DestroyedEventHandler(GameObject sender);
 
@@ -12,13 +6,18 @@ namespace Ludum.Engine
 	{
 		public event DestroyedEventHandler Destroyed;
 
-		private bool isDestroyed = false;
-		public bool IsDestroyed { get { return isDestroyed; } }
+		private bool IsDestroyed { get; set; }
+
+		public GameObject()
+		{
+			IsDestroyed = false;
+		}
 
 		public void Destroy()
 		{
 			// Can only destroy once
-			if (isDestroyed) return;
+			if (IsDestroyed) return;
+			IsDestroyed = true;
 
 			Destroyed(this);
 

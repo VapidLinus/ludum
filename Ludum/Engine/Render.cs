@@ -14,10 +14,7 @@ namespace Ludum.Engine
 				if (window == null) throw new InvalidOperationException("OnInitialize() has not been called");
 				return window;
 			}
-			private set
-			{
-				window = value;
-			}
+			private set { window = value; }
 		}
 
 		private static bool isInitialized = false;
@@ -28,11 +25,8 @@ namespace Ludum.Engine
 			isInitialized = true;
 
 			Window = new RenderWindow(new VideoMode(800, 450), "Ludum", Styles.Close);
-			Window.SetVerticalSyncEnabled(false);
-			Window.Closed += (sender, e) =>
-			{
-				((RenderWindow)sender).Close();
-			};
+			Window.SetVerticalSyncEnabled(true);
+			Window.Closed += (sender, e) => ((RenderWindow)sender).Close();
 		}
 	}
 }

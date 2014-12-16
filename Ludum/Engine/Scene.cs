@@ -50,19 +50,15 @@ namespace Ludum.Engine
 		/// <param name="delta"></param>
 		public override void OnUpdate(float delta)
 		{
-			foreach (KeyValuePair<GameObject, bool> pair in gameObjects)
+			// Call start in newly created game objects
+			foreach (var keyValuePair in gameObjects.Where(pair => !pair.Value))
 			{
-				// If start hasn't been called
-				if (!pair.Value)
-				{
-					// Call start
-					pair.Key.OnStart();
-					gameObjects.Add(pair.Key, true);
-				}
+				keyValuePair.Key.OnStart();
+				gameObjects.Add(keyValuePair.Key, true);
 			}
 
 			// Update
-			foreach (GameObject gameObject in GameObjects)
+			foreach (var gameObject in GameObjects)
 			{
 				// TODO: Must check if OnUpdate can get called on destroyed objects
 				gameObject.OnUpdate(delta);
@@ -74,7 +70,7 @@ namespace Ludum.Engine
 		/// </summary>
 		public override void OnRender()
 		{
-			foreach (GameObject gameObject in GameObjects)
+			foreach (var gameObject in GameObjects)
 			{
 				gameObject.OnRender();
 			}
@@ -83,9 +79,9 @@ namespace Ludum.Engine
 		/// <summary>
 		/// Called when the scene gets unloaded and destroyed
 		/// </summary>
-		public override void OnDestroy()
+		protected override void OnDestroy()
 		{
-			foreach (GameObject gameObject in GameObjects)
+			foreach (var gameObject in GameObjects)
 			{
 				gameObject.Destroy();
 			}
@@ -95,7 +91,7 @@ namespace Ludum.Engine
 		{
 			// Remove from list and stop listening to destroy event
 			gameObjects.Remove(gameObject);
-			gameObject.Destroyed -= new DestroyedEventHandler(OnGameObjectDestroyed);
+			gameObject.Destroyed -= OnGameObjectDestroyed;
 		}
 	}
 }
