@@ -5,6 +5,6 @@
 		public virtual void OnStart() { }
 		public virtual void OnUpdate(float delta) { }
 		public virtual void OnRender() { }
-		protected virtual void OnDestroy() { }
+		public virtual void OnDestroy() { }
 	}
 }

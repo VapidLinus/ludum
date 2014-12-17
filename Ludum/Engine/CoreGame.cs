@@ -29,21 +29,23 @@ namespace Ludum.Engine
 				frames++;
 
 				// Count fps
-				if ((time += delta) > 1000)
+				if ((time += delta) >= 1000)
 				{
 					Console.WriteLine("FPS: " + frames);
-					time = 0;
+					time -= 1000;
 					frames = 0;
 				}
 
 				// Handle window
 				Render.Window.DispatchEvents();
-				Render.Window.Clear(new Color(0, 150, 255));
-				Render.Window.Display();
 
 				// Update
 				OnUpdate((float)delta);
+
+				// Render
+				Render.Window.Clear(new Color(0, 150, 255));
 				OnRender();
+				Render.Window.Display();
 			}
 
 			// Exit
@@ -51,14 +53,27 @@ namespace Ludum.Engine
 			OnExit();
 		}
 
-		public virtual void OnInitialize()
+		protected virtual void OnInitialize()
 		{
 			Render.OnInitialize();
 		}
-		public virtual void OnLoadContent() { }
-		public virtual void OnUpdate(float delta) { }
-		public virtual void OnRender() { }
-		public virtual void OnUnloadContent() { }
-		public virtual void OnExit() { }
+
+		protected virtual void OnUpdate(float delta)
+		{
+			Application.Scene.OnUpdate(delta);
+		}
+
+		protected virtual void OnRender()
+		{
+			Application.Scene.OnRender();
+		}
+
+		protected virtual void OnExit()
+		{
+			Application.Scene.OnDestroy();
+		}
+
+		protected virtual void OnLoadContent() { }
+		protected virtual void OnUnloadContent() { }
 	}
 }

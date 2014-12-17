@@ -6,27 +6,20 @@ using System.Threading.Tasks;
 
 namespace Ludum.Engine
 {
-	class Scene : Behaviour
+	sealed class Scene : Behaviour
 	{
-		private Dictionary<GameObject, bool> gameObjects;
-		public IReadOnlyCollection<GameObject> GameObjects
-		{
-			get
-			{
-				return gameObjects.Keys.ToList().AsReadOnly();
-			}
-		}
+		private readonly Dictionary<GameObject, bool> gameObjects;
+		public IReadOnlyCollection<GameObject> GameObjects { get { return gameObjects.Keys.ToList().AsReadOnly(); } }
+
+		private bool isInitialized;
+
+		public bool IsDestroyed { get; private set; }
 
 		public Scene()
 		{
 			gameObjects = new Dictionary<GameObject, bool>();
 		}
 
-		/// <summary>
-		/// Registers an object to the scene.
-		/// Should never be manually called.
-		/// </summary>
-		/// <param name="gameObject"></param>
 		public void RegisterGameObject(GameObject gameObject)
 		{
 			if (gameObjects.ContainsKey(gameObject)) throw new InvalidOperationException("Never manually register a game object.");
@@ -36,25 +29,19 @@ namespace Ludum.Engine
 			gameObject.Destroyed += new DestroyedEventHandler(OnGameObjectDestroyed);
 		}
 
-		/// <summary>
-		/// Called first frame after scene gets created
-		/// </summary>
-		public override void OnStart()
-		{
-			
-		}
-
-		/// <summary>
-		/// Called each frame
-		/// </summary>
-		/// <param name="delta"></param>
 		public override void OnUpdate(float delta)
 		{
+			if (!isInitialized)
+			{
+				OnStart();
+				isInitialized = true;
+			}
+
 			// Call start in newly created game objects
-			foreach (var keyValuePair in gameObjects.Where(pair => !pair.Value))
+			foreach (var keyValuePair in gameObjects.ToArray().Where(pair => !pair.Value))
 			{
 				keyValuePair.Key.OnStart();
-				gameObjects.Add(keyValuePair.Key, true);
+				gameObjects[keyValuePair.Key] = true;
 			}
 
 			// Update
@@ -65,9 +52,6 @@ namespace Ludum.Engine
 			}
 		}
 
-		/// <summary>
-		/// Called each frame after OnUpdate
-		/// </summary>
 		public override void OnRender()
 		{
 			foreach (var gameObject in GameObjects)
@@ -76,11 +60,10 @@ namespace Ludum.Engine
 			}
 		}
 
-		/// <summary>
-		/// Called when the scene gets unloaded and destroyed
-		/// </summary>
-		protected override void OnDestroy()
+		public override void OnDestroy()
 		{
+			IsDestroyed = true;
+
 			foreach (var gameObject in GameObjects)
 			{
 				gameObject.Destroy();

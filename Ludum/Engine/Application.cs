@@ -7,5 +7,11 @@
 		{
 			get { return scene ?? (scene = new Scene()); }
 		}
+
+		public static void NewScene()
+		{
+			scene.OnDestroy();
+			scene = new Scene();
+		}
 	}
 }
