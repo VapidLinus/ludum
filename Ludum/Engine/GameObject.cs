@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Ludum.Engine.Resources;
+using SFML.Graphics;
 
 namespace Ludum.Engine
 {
@@ -9,14 +11,14 @@ namespace Ludum.Engine
 
 	public sealed class GameObject : Behaviour
 	{
-		private readonly Transform transform;
+		public readonly Transform Transform;
 		private readonly Dictionary<Component, bool> components;
 
 		public IReadOnlyCollection<Component> Components
 		{
 			get
 			{
-				var list = new List<Component> { transform };
+				var list = new List<Component> { Transform };
 				list.AddRange(this.components.Keys.ToList());
 				return list.AsReadOnly();
 			}
@@ -29,9 +31,13 @@ namespace Ludum.Engine
 
 		public GameObject(Vector2 position)
 		{
-			transform = new Transform() { Position = position };
+			Transform = new Transform() { Position = position };
 			components = new Dictionary<Component, bool>();
 
+			for (int i = 0; i < 10; i++)
+			{
+				AddComponent<ShapeRenderer>();
+			}
 			Application.Scene.RegisterGameObject(this);
 		}
 

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ludum.Engine
 {
@@ -45,10 +43,11 @@ namespace Ludum.Engine
 			}
 
 			// Update
-			foreach (var gameObject in GameObjects)
+			GameObject[] objects = GameObjects.ToArray();
+			for (int i = 0; i < objects.Length; i++)
 			{
-				// TODO: Must check if OnUpdate can get called on destroyed objects
-				gameObject.OnUpdate(delta);
+				// TODO: Must check if OnUpdate can get called on destroyed oboects
+				objects[i].OnUpdate(delta);
 			}
 		}
 

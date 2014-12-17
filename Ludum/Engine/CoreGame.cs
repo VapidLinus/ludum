@@ -19,21 +19,18 @@ namespace Ludum.Engine
 			// Update
 			var timer = Stopwatch.StartNew();
 			double time = 0;
-			int frames = 0;
 			while (Render.Window.IsOpen())
 			{
 				// Record delta
 				double delta = timer.ElapsedMilliseconds;
 				timer.Restart();
 
-				frames++;
-
 				// Count fps
 				if ((time += delta) >= 1000)
 				{
-					Console.WriteLine("FPS: " + frames);
-					time -= 1000;
-					frames = 0;
+					time = 0;
+					// TODO: Fix, this is stupid
+					Console.WriteLine("FPS: " + 1 / delta * 1000);
 				}
 
 				// Handle window

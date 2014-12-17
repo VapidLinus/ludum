@@ -17,7 +17,7 @@ namespace Ludum.Engine
 			private set { window = value; }
 		}
 
-		private static bool isInitialized = false;
+		private static bool isInitialized;
 		internal static void OnInitialize()
 		{
 			// Mark as initialized

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Ludum.Engine;
 using Ludum.Engine.Resources;
 using SFML.Graphics;
-using Transform = Ludum.Engine.Transform;
 
 namespace Ludum.Core
 {
@@ -12,7 +11,7 @@ namespace Ludum.Core
 		private readonly Random random = new Random();
 
 		private float delay = 1000;
-		private float timer = 0;
+		private float timer;
 
 		private readonly Dictionary<GameObject, Vector2> velocity = new Dictionary<GameObject, Vector2>();
 		private readonly List<GameObject> gameObjects = new List<GameObject>();
@@ -33,7 +32,7 @@ namespace Ludum.Core
 			foreach (var gameObject in gameObjects)
 			{
 				velocity[gameObject] += new Vector2((float)random.NextDouble() - .5f, (float)random.NextDouble() - .5f) * delta * .001f * (float)random.NextDouble();
-				var transform = gameObject.GetComponent<Transform>();
+				var transform = gameObject.Transform;
 				transform.Position += velocity[gameObject] * delta;
 				if ((new Vector2(400, 220) - transform.Position).Magnitude() > 300)
 				{
