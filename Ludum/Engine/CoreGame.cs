@@ -6,6 +6,23 @@ namespace Ludum.Engine
 {
 	abstract class CoreGame
 	{
+		private const int SMOOTH_FPS_SAMPLES = 50;
+		private int fpsCurrentSample = 0;
+		private float[] fpsSamples = new float[SMOOTH_FPS_SAMPLES];
+
+		public int SmoothFPS
+		{
+			get
+			{
+				float fps = 0;
+				for (int i = 0; i < SMOOTH_FPS_SAMPLES; i++)
+				{
+					fps += fpsSamples[i];
+				}
+				return (int)Math.Round(fps / (float)SMOOTH_FPS_SAMPLES);
+			}
+		}
+
 		public void Run()
 		{
 			// Load
@@ -18,26 +35,29 @@ namespace Ludum.Engine
 
 			// Update
 			var timer = Stopwatch.StartNew();
-			double time = 0;
+			float time = 0;
 			while (Render.Window.IsOpen())
 			{
 				// Record delta
-				double delta = timer.ElapsedMilliseconds;
+				float delta = timer.ElapsedTicks / (float)Stopwatch.Frequency;
+
 				timer.Restart();
 
+				fpsSamples[fpsCurrentSample++] = 1f / (float)delta;
+				if (fpsCurrentSample >= SMOOTH_FPS_SAMPLES) fpsCurrentSample = 0;
+
 				// Count fps
-				if ((time += delta) >= 1000)
+				if ((time += delta) >= .1f)
 				{
 					time = 0;
-					// TODO: Fix, this is stupid
-					Console.WriteLine("FPS: " + 1 / delta * 1000);
+					Console.WriteLine("FPS: " + SmoothFPS);
 				}
 
 				// Handle window
 				Render.Window.DispatchEvents();
 
 				// Update
-				OnUpdate((float)delta);
+				OnUpdate(delta);
 
 				// Render
 				Render.Window.Clear(new Color(0, 150, 255));

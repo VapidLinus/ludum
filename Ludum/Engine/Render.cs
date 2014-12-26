@@ -25,7 +25,7 @@ namespace Ludum.Engine
 			isInitialized = true;
 
 			Window = new RenderWindow(new VideoMode(800, 450), "Ludum", Styles.Close);
-			Window.SetVerticalSyncEnabled(true);
+			Window.SetVerticalSyncEnabled(false);
 			Window.Closed += (sender, e) => ((RenderWindow)sender).Close();
 		}
 	}

@@ -21,6 +21,7 @@ namespace Ludum.Engine
 		{
 			if (shape == null) return;
 			shape.Position = (Vector2f) GameObject.GetComponent<Transform>().Position;
+			shape.Position = new Vector2f(shape.Position.X, -shape.Position.Y);
 		}
 
 		public override void OnRender()
