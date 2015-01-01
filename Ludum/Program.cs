@@ -1,4 +1,4 @@
-﻿using Ludum.Core;
+﻿using Ludum.TestGame;
 
 namespace Ludum
 {

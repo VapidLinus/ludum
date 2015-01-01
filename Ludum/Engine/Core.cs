@@ -4,7 +4,7 @@ using SFML.Graphics;
 
 namespace Ludum.Engine
 {
-	abstract class CoreGame
+	abstract class Core
 	{
 		private const int SMOOTH_FPS_SAMPLES = 50;
 		private int fpsCurrentSample = 0;

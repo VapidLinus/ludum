@@ -4,9 +4,9 @@ using Ludum.Engine;
 using Ludum.Engine.Resources;
 using SFML.Graphics;
 
-namespace Ludum.Core
+namespace Ludum.TestGame
 {
-	class Game : CoreGame
+	class Game : Core
 	{
 		private readonly Random random = new Random();
 
