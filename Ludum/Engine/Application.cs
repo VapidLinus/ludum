@@ -1,17 +1,26 @@
 ﻿namespace Ludum.Engine
 {
-	static class Application
+	public class Application : SingleInstance<Application>
 	{
-		private static Scene scene;
-		public static Scene Scene
-		{
-			get { return scene ?? (scene = new Scene()); }
-		}
+		private Scene scene;
 
-		public static void NewScene()
+		internal Application()
 		{
-			scene.OnDestroy();
+			SetInstance(this);
+
 			scene = new Scene();
 		}
+
+		#region Static
+		public static void NewScene()
+		{
+			Instance.scene.OnDestroy();
+			Instance.scene = new Scene();
+		}
+		public static Scene Scene
+		{
+			get { return Instance.scene ?? (Instance.scene = new Scene()); }
+		}
+		#endregion
 	}
 }

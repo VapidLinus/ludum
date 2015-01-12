@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Ludum.Engine
 {
-	sealed class Scene : Behaviour
+	public sealed class Scene : Behaviour
 	{
 		private readonly Dictionary<GameObject, bool> gameObjects;
 		public IReadOnlyCollection<GameObject> GameObjects { get { return gameObjects.Keys.ToList().AsReadOnly(); } }

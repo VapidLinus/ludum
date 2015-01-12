@@ -70,19 +70,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Engine\Components\Collision\BoxCollider.cs" />
+    <Compile Include="Engine\Components\Collision\Collider.cs" />
+    <Compile Include="Engine\Input.cs" />
+    <Compile Include="Engine\Resources\Rectangle.cs" />
+    <Compile Include="Engine\RenderMode.cs" />
+    <Compile Include="Engine\SingleInstance.cs" />
     <Compile Include="TestGame\Game.cs" />
     <Compile Include="Engine\Application.cs" />
-    <Compile Include="Engine\Component.cs" />
+    <Compile Include="Engine\Components\Component.cs" />
     <Compile Include="Engine\GameObject.cs" />
     <Compile Include="Engine\Behaviour.cs" />
     <Compile Include="Engine\Render.cs" />
     <Compile Include="Engine\Core.cs" />
     <Compile Include="Engine\Resources\Vector2.cs" />
     <Compile Include="Engine\Scene.cs" />
-    <Compile Include="Engine\ShapeRenderer.cs" />
+    <Compile Include="Engine\Components\ShapeRenderer.cs" />
     <Compile Include="Engine\Transform.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestGame\Player.cs" />
+    <Compile Include="TestGame\Wall.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -104,6 +112,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

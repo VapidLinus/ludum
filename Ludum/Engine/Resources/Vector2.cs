@@ -1,27 +1,22 @@
 ﻿using System;
 using SFML.Window;
 
-namespace Ludum.Engine.Resources
+namespace Ludum.Engine
 {
-	public class Vector2
+	public struct Vector2
 	{
-		public float X { get; set; }
-		public float Y { get; set; }
-
-		/// <summary>
-		/// Creatures a 2D vector with the coordinates 0, 0.
-		/// </summary>
-		public Vector2() : this(0, 0) { }
+		public float x;
+		public float y;
 
 		/// <summary>
 		/// Creatures a 2D vector with given coordinates.
 		/// </summary>
 		/// <param name="x">X coordinate</param>
 		/// <param name="y">Y coordinate</param>
-		public Vector2(float x, float y)
+		public Vector2(float x = 0, float y = 0)
 		{
-			this.X = x;
-			this.Y = y;
+			this.x = x;
+			this.y = y;
 		}
 
 		/// <summary>
@@ -29,34 +24,17 @@ namespace Ludum.Engine.Resources
 		/// </summary>
 		public void Normalize()
 		{
-			float magnitude = Magnitude();
-			X /= magnitude;
-			Y /= magnitude;
+			float magnitude = Magnitude;
+			x /= magnitude;
+			y /= magnitude;
 		}
 
 		/// <summary>
 		/// Gets vector's magnitude.
 		/// </summary>
-		/// <returns>Vector's magnitude</returns>
-		public float Magnitude()
+		public float Magnitude
 		{
-			return (float)Math.Sqrt(X * X + Y * Y);
-		}
-
-		public override bool Equals(object obj)
-		{
-			return obj is Vector2 && obj.Equals(this);
-		}
-
-		public bool Equals(Vector2 other)
-		{
-			if (ReferenceEquals(other, null)) return false;
-			return X.Equals(other.X) && Y.Equals(other.Y);
-		}
-
-		public override int GetHashCode()
-		{
-			return X.GetHashCode() ^ Y.GetHashCode();
+			get { return (float)Math.Sqrt(x * x + y * y); }
 		}
 
 		/// <summary>
@@ -66,36 +44,74 @@ namespace Ludum.Engine.Resources
 		{
 			get
 			{
-				var normalized = new Vector2(X, Y);
+				var normalized = new Vector2(x, y);
 				normalized.Normalize();
 				return normalized;
 			}
 		}
 
+		/// <summary>
+		/// Creates a copy of a Vector2
+		/// </summary>
+		/// <param name="other">Vector2 to make a copy of</param>
+		/// <returns>Copy of other</returns>
+		public Vector2 Clone(Vector2 other)
+		{
+			if (other == null) throw new ArgumentNullException("other");
+			return new Vector2(other.x, other.y);
+		}
+
+		#region Object
+		public override bool Equals(object obj)
+		{
+			return obj is Vector2 && obj.Equals(this);
+		}
+
+		public bool Equals(Vector2 other)
+		{
+			if (ReferenceEquals(other, null)) return false;
+			return x.Equals(other.x) && y.Equals(other.y);
+		}
+
+		public override int GetHashCode()
+		{
+			return x.GetHashCode() ^ y.GetHashCode();
+		}
+
+		public override string ToString()
+		{
+			return x + ", " + y;
+		}
+		#endregion
 		#region Operators
 		public static Vector2 operator +(Vector2 v1, Vector2 v2)
 		{
-			return new Vector2(v1.X + v2.X, v1.Y + v2.Y);
+			return new Vector2(v1.x + v2.x, v1.y + v2.y);
 		}
 
 		public static Vector2 operator -(Vector2 v1, Vector2 v2)
 		{
-			return new Vector2(v1.X - v2.X, v1.Y - v2.Y);
+			return new Vector2(v1.x - v2.x, v1.y - v2.y);
 		}
 
 		public static Vector2 operator *(Vector2 v1, Vector2 v2)
 		{
-			return new Vector2(v1.X * v2.X, v1.Y * v2.Y);
+			return new Vector2(v1.x * v2.x, v1.y * v2.y);
 		}
 
 		public static Vector2 operator *(Vector2 v1, float v2)
 		{
-			return new Vector2(v1.X * v2, v1.Y * v2);
+			return new Vector2(v1.x * v2, v1.y * v2);
 		}
 
 		public static Vector2 operator /(Vector2 v1, Vector2 v2)
 		{
-			return new Vector2(v1.X / v2.X, v1.Y / v2.Y);
+			return new Vector2(v1.x / v2.x, v1.y / v2.y);
+		}
+
+		public static Vector2 operator /(Vector2 v1, float v2)
+		{
+			return new Vector2(v1.x / v2, v1.y / v2);
 		}
 
 		public static bool operator ==(Vector2 v1, Vector2 v2)
@@ -111,7 +127,7 @@ namespace Ludum.Engine.Resources
 		public static explicit operator Vector2f(Vector2 other)
 		{
 			if (other == null) throw new InvalidOperationException();
-			return new Vector2f(other.X, other.Y);
+			return new Vector2f(other.x, other.y);
 		}
 		#endregion
 

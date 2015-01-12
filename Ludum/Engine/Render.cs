@@ -4,29 +4,27 @@ using SFML.Window;
 
 namespace Ludum.Engine
 {
-	static class Render
+	public class Render : SingleInstance<Render>
 	{
-		private static RenderWindow window;
-		public static RenderWindow Window
+		private readonly Core core;
+		private readonly RenderWindow window;
+
+		internal Render(Core core)
+			: this(core, new RenderMode(new VideoMode(800, 450), "Ludum", Styles.Close)) { }
+
+		internal Render(Core core, RenderMode renderMode)
 		{
-			get
-			{
-				if (window == null) throw new InvalidOperationException("OnInitialize() has not been called");
-				return window;
-			}
-			private set { window = value; }
+			SetInstance(this);
+
+			this.core = core;
+
+			window = new RenderWindow(renderMode.videoMode, renderMode.title, renderMode.style);
+			window.SetVerticalSyncEnabled(false);
+			window.Closed += (sender, e) => ((RenderWindow)sender).Close();
 		}
 
-		private static bool isInitialized;
-		internal static void OnInitialize()
-		{
-			// Mark as initialized
-			if (isInitialized) return;
-			isInitialized = true;
-
-			Window = new RenderWindow(new VideoMode(800, 450), "Ludum", Styles.Close);
-			Window.SetVerticalSyncEnabled(false);
-			Window.Closed += (sender, e) => ((RenderWindow)sender).Close();
-		}
+		#region Static
+		public static RenderWindow Window { get { return Instance.window; } }
+		#endregion
 	}
 }

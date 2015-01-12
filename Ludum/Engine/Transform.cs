@@ -1,5 +1,5 @@
 ﻿using System;
-using Ludum.Engine.Resources;
+using Ludum.Engine;
 
 namespace Ludum.Engine
 {

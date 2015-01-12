@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Ludum.Engine.Resources;
+using Ludum.Engine;
 using SFML.Graphics;
 
 namespace Ludum.Engine
 {
 	public delegate void DestroyedEventHandler(GameObject sender);
 
-	public sealed class GameObject : Behaviour
+	public class GameObject : Behaviour
 	{
 		public readonly Transform Transform;
 		private readonly Dictionary<Component, bool> components;
@@ -24,6 +24,12 @@ namespace Ludum.Engine
 			}
 		}
 
+		public Vector2 Position
+		{
+			get { return Transform.Position; }
+			set { Transform.Position = value; }
+		}
+
 		public event DestroyedEventHandler Destroyed;
 		private bool isDestroyed;
 
@@ -34,10 +40,6 @@ namespace Ludum.Engine
 			Transform = new Transform() { Position = position };
 			components = new Dictionary<Component, bool>();
 
-			for (int i = 0; i < 10; i++)
-			{
-				AddComponent<ShapeRenderer>();
-			}
 			Application.Scene.RegisterGameObject(this);
 		}
 
@@ -46,6 +48,7 @@ namespace Ludum.Engine
 			// Instantiate
 			var component = new T { GameObject = this };
 			if (component is Transform) throw new InvalidOperationException("Can't add Transform component");
+			component.OnAwake();
 
 			// Add
 			components.Add(component, false);
