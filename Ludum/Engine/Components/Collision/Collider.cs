@@ -24,25 +24,30 @@ namespace Ludum.Engine
 			colliders.Remove(this);
 		}
 
-		public static bool CheckCollision(Vector2 point)
+		public static Collider CheckCollision(Vector2 point)
 		{
 			for (int i = 0; i < colliders.Count; i++)
 			{
-				if (colliders[i].Collides(point)) return true;
+				if (colliders[i].Collides(point)) return colliders[i];
 			}
-			return false;
+			return null;
 		}
 
-		public static bool CheckCollision(Collider other)
+		/// <summary>
+		/// Checks if the specified collider is colliding with another
+		/// </summary>
+		/// <param name="other">The collider to check collision for</param>
+		/// <returns>The collider it collides with, or null</returns>
+		public static Collider CheckCollision(Collider other)
 		{
 			for (int i = 0; i < colliders.Count; i++)
 			{
 				var collider = colliders[i];
 
 				if (collider == other) continue;
-				if (collider.Collides(other)) return true;
+				if (collider.Collides(other)) return colliders[i];
 			}
-			return false;
+			return null;
 		}
 	}
 }

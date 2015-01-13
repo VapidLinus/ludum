@@ -70,6 +70,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Engine\Components\Collision\CircleCollider.cs" />
     <Compile Include="Engine\Components\Collision\BoxCollider.cs" />
     <Compile Include="Engine\Components\Collision\Collider.cs" />
     <Compile Include="Engine\Input.cs" />

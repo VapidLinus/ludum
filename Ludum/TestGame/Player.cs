@@ -10,16 +10,16 @@ namespace Ludum.TestGame
 		private Vector2 velocity = Vector2.Zero;
 
 		private ShapeRenderer renderer;
-		private BoxCollider collider;
+		private CircleCollider collider;
 
 		public override void OnStart()
 		{
 			base.OnStart();
 
 			renderer = AddComponent<ShapeRenderer>();
-			collider = AddComponent<BoxCollider>();
+			collider = AddComponent<CircleCollider>();
 
-			collider.Size = Vector2.One * 40;
+			collider.Radius = 20;
 			renderer.SetShape(new CircleShape(20));;
 		}
 
@@ -29,7 +29,7 @@ namespace Ludum.TestGame
 
 			if (Collider.CheckCollision(collider))
 			{
-				Console.WriteLine("Collision! :D");
+				
 			}
 
 			if (Input.IsKeyDown(Keyboard.Key.Left))
@@ -49,8 +49,8 @@ namespace Ludum.TestGame
 				velocity.y -= delta * 1000;
 			}
 
-			velocity.x *= (float)Math.Pow(0.1f, delta);
-			velocity.y *= (float)Math.Pow(0.1f, delta);
+			velocity.x *= (float)Math.Pow(0.001f, delta);
+			velocity.y *= (float)Math.Pow(0.001f, delta);
 
 			Position += velocity * delta;
 		}
