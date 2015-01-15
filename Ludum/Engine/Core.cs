@@ -6,22 +6,7 @@ namespace Ludum.Engine
 {
 	abstract class Core
 	{
-		private const int SMOOTH_FPS_SAMPLES = 50;
-		private int fpsCurrentSample = 0;
-		private float[] fpsSamples = new float[SMOOTH_FPS_SAMPLES];
 
-		public int SmoothFPS
-		{
-			get
-			{
-				float fps = 0;
-				for (int i = 0; i < SMOOTH_FPS_SAMPLES; i++)
-				{
-					fps += fpsSamples[i];
-				}
-				return (int)Math.Round(fps / (float)SMOOTH_FPS_SAMPLES);
-			}
-		}
 
 		private readonly Render render;
 		private readonly Application application;
@@ -53,15 +38,13 @@ namespace Ludum.Engine
 				float delta = timer.ElapsedTicks / (float)Stopwatch.Frequency;
 				timer.Restart();
 
-				// Calculate smooth fps
-				fpsSamples[fpsCurrentSample++] = 1f / (float)delta;
-				if (fpsCurrentSample >= SMOOTH_FPS_SAMPLES) fpsCurrentSample = 0;
+				render.ReportDelta((float)delta);
 
 				// Display fps
 				if ((time += delta) >= .1f)
 				{
 					time = 0;
-					Console.WriteLine("FPS: " + SmoothFPS);
+					Console.WriteLine("FPS: " + Render.SmoothFPS);
 				}
 
 				// Handle window
@@ -82,8 +65,8 @@ namespace Ludum.Engine
 		}
 
 		protected virtual void OnInitialize() { }
-		protected virtual void OnUpdate(float delta) 
-		{ 
+		protected virtual void OnUpdate(float delta)
+		{
 			Application.Scene.OnUpdate(delta);
 			input.Update();
 		}

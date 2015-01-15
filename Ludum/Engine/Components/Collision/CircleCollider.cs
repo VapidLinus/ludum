@@ -4,34 +4,20 @@ namespace Ludum.Engine
 {
 	public class CircleCollider : Collider
 	{
-		public float Radius = 1;
-
-		public override bool Collides(Vector2 point)
+		public override Vector2 Top
 		{
-			float distanceX = Math.Abs(GameObject.Position.x - point.x);
-			float distanceY = Math.Abs(GameObject.Position.y - point.y);
-			float distance = distanceX * distanceX + distanceY * distanceY;
-
-			return distance < Radius * Radius;
+			get
+			{
+				ColliderPosition = Transform.Position;
+				return Transform.Position + Vector2.Up * Radius;
+			}
 		}
 
-		public override bool Collides(Collider other)
+		private float radius = 1f;
+		public float Radius
 		{
-			if (other is CircleCollider)
-			{
-				var circle = (CircleCollider)other;
-
-				float distanceX = Math.Abs(GameObject.Position.x - circle.GameObject.Position.x);
-				float distanceY = Math.Abs(GameObject.Position.y - circle.GameObject.Position.y);
-
-				return (distanceX * distanceX + distanceY * distanceY < Radius * Radius);
-			}
-			else if (other is BoxCollider)
-			{
-				return other.Collides(this);
-			}
-			Console.WriteLine("Unsupported collision");
-			return false;
+			get { return radius; }
+			set { radius = Math.Max(0, value); }
 		}
 	}
 }

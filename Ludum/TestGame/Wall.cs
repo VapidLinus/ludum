@@ -13,5 +13,10 @@ namespace Ludum.TestGame
 			var b = AddComponent<BoxCollider>();
 			b.Size = new Vector2(40, 40);
 		}
+
+		public override void OnUpdate(float delta)
+		{
+			base.OnUpdate(delta);
+		}
 	}
 }

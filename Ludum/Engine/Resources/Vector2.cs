@@ -25,8 +25,15 @@ namespace Ludum.Engine
 		public void Normalize()
 		{
 			float magnitude = Magnitude;
-			x /= magnitude;
-			y /= magnitude;
+			if (magnitude == 0)
+			{
+				x = y = 0;
+			}
+			else
+			{
+				x /= magnitude;
+				y /= magnitude;
+			}
 		}
 
 		/// <summary>
@@ -34,7 +41,15 @@ namespace Ludum.Engine
 		/// </summary>
 		public float Magnitude
 		{
-			get { return (float)Math.Sqrt(x * x + y * y); }
+			get { return (float)Math.Sqrt(SquareMagnitude); }
+		}
+
+		/// <summary>
+		/// Gets vector's magnitude^2.
+		/// </summary>
+		public float SquareMagnitude
+		{
+			get { return x * x + y * y; }
 		}
 
 		/// <summary>
@@ -48,17 +63,6 @@ namespace Ludum.Engine
 				normalized.Normalize();
 				return normalized;
 			}
-		}
-
-		/// <summary>
-		/// Creates a copy of a Vector2
-		/// </summary>
-		/// <param name="other">Vector2 to make a copy of</param>
-		/// <returns>Copy of other</returns>
-		public Vector2 Clone(Vector2 other)
-		{
-			if (other == null) throw new ArgumentNullException("other");
-			return new Vector2(other.x, other.y);
 		}
 
 		#region Object
