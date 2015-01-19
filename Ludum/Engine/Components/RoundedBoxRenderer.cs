@@ -6,7 +6,7 @@ namespace Ludum.Engine
 {
 	public class RoundedBoxRenderer : Component
 	{
-		private RectangleShape boxVertical, boxHorizontal;
+		/*private RectangleShape boxVertical, boxHorizontal;
 		private CircleShape[] circles = new CircleShape[4];
 
 		public Vector2 Size
@@ -79,6 +79,6 @@ namespace Ludum.Engine
 			Render.Window.Draw(circles[1]);
 			Render.Window.Draw(circles[2]);
 			Render.Window.Draw(circles[3]);
-		}
+		}*/
 	}
 }

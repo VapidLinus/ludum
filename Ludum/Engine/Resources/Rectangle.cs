@@ -1,5 +1,7 @@
 ﻿using System;
 using Ludum.Engine;
+using SFML.Window;
+using SFML.Graphics;
 
 namespace Ludum.Engine
 {
@@ -7,7 +9,6 @@ namespace Ludum.Engine
 	{
 		private Vector2 position;
 		private Vector2 size;
-		private Vector2 origin;
 
 		#region Properties
 		public Vector2 Position
@@ -15,25 +16,15 @@ namespace Ludum.Engine
 			get { return position; }
 			set { this.position = value; }
 		}
+		public Vector2 CenterPosition
+		{
+			get { return position + size / 2.0; }
+			set { this.position = value - size / 2.0; }
+		}
 		public Vector2 Size
 		{
 			get { return size; }
 			set { size = new Vector2(Math.Max(value.x, 0), Math.Max(value.y, 0)); }
-		}
-		public Vector2 OriginPosition
-		{
-			get { return new Vector2(position.x + size.x * origin.x, position.y + size.y * origin.y); }
-			set { this.position = new Vector2(value.x - size.x * origin.x, value.y - size.y * origin.y); }
-		}
-		public Vector2 Origin
-		{
-			get { return origin; }
-			set
-			{
-				origin = new Vector2(
-					Math.Min(Math.Max(0, origin.x), 1),
-					Math.Min(Math.Max(0, origin.y), 1));
-			}
 		}
 		#endregion
 
@@ -41,17 +32,26 @@ namespace Ludum.Engine
 		{
 			this.position = position;
 			this.size = size;
-			this.origin = Vector2.One / 2;
+		}
+
+		public override string ToString()
+		{
+			return String.Format("Rect({0},{1},{2},{3})", position.x, position.y, position.x + size.x, position.y + size.y);
 		}
 
 		#region Collision
 		public bool Intersects(Rectangle other)
 		{
-			return
+			bool b =
 				other.Position.x + other.Size.x > this.position.x &&
 				other.Position.x < this.position.x + this.Size.x &&
 				other.Position.y + other.Size.y > this.position.y &&
 				other.Position.y < this.position.y + this.Size.y;
+
+			if (b)
+				Console.WriteLine("{0} vs {1} = {2}", this, other, b);
+
+			return b;
 		}
 
 		public bool Intersects(Vector2 point)

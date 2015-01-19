@@ -70,9 +70,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Engine\Camera.cs" />
     <Compile Include="Engine\Components\Collision\CircleCollider.cs" />
     <Compile Include="Engine\Components\Collision\BoxCollider.cs" />
     <Compile Include="Engine\Components\Collision\Collider.cs" />
+    <Compile Include="Engine\Components\RectangleRenderer.cs" />
     <Compile Include="Engine\Components\RoundedBoxRenderer.cs" />
     <Compile Include="Engine\Input.cs" />
     <Compile Include="Engine\MathUtil.cs" />

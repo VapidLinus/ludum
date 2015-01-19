@@ -9,11 +9,11 @@ namespace Ludum.Engine
 		private readonly Core core;
 		private readonly RenderWindow window;
 
-		private float time = 0;
+		private double time = 0;
 
 		private const int SMOOTH_FPS_SAMPLES = 50;
 		private int fpsCurrentSample = 0;
-		private float[] fpsSamples = new float[SMOOTH_FPS_SAMPLES];
+		private double[] fpsSamples = new double[SMOOTH_FPS_SAMPLES];
 
 		internal Render(Core core)
 			: this(core, new RenderMode(new VideoMode(800, 450), "Ludum", Styles.Close)) { }
@@ -29,11 +29,11 @@ namespace Ludum.Engine
 			window.Closed += (sender, e) => ((RenderWindow)sender).Close();
 		}
 
-		internal void ReportDelta(float delta)
+		internal void ReportDelta(double delta)
 		{
 			time += delta;
 
-			fpsSamples[fpsCurrentSample++] = 1f / delta;
+			fpsSamples[fpsCurrentSample++] = 1 / delta;
 			if (fpsCurrentSample >= SMOOTH_FPS_SAMPLES) fpsCurrentSample = 0;
 		}
 
@@ -46,19 +46,40 @@ namespace Ludum.Engine
 				return (int)Math.Round(Instance.fpsSamples[Instance.fpsCurrentSample]);
 			}
 		}
+		public static int WindowWidth { get { return (int)Window.Size.X; } }
+		public static int WindowHeight { get { return (int)Window.Size.Y; } }
 		public static int SmoothFPS
 		{
 			get
 			{
-				float fps = 0;
+				double fps = 0;
 				for (int i = 0; i < SMOOTH_FPS_SAMPLES; i++)
 				{
 					fps += Instance.fpsSamples[i];
 				}
-				return (int)Math.Round(fps / (float)SMOOTH_FPS_SAMPLES);
+				return (int)Math.Round(fps / (double)SMOOTH_FPS_SAMPLES);
 			}
 		}
-		public static float Time { get { return Instance.time; } }
+		public static double Time { get { return Instance.time; } }
+		public static void DrawRectangle(Vector2 point1, Vector2 point2)
+		{
+			point1.y = -point1.y;
+			point2.y = -point2.y;
+
+			var shape = new RectangleShape((Vector2f)new Vector2(point2.x - point1.x, point2.y - point1.y));
+			var camera = Application.Scene.Camera;
+
+			float zoom = (float)camera.Zoom;
+
+			shape.Scale = new Vector2f(zoom, zoom);
+			shape.Origin = shape.Size * 0.5f;
+			shape.FillColor = new Color(0, 255, 0);
+			shape.Position = new Vector2f(
+				Render.WindowWidth * 0.5f + (float)((point1.x + point2.x) / 2f - camera.Position.x) * zoom,
+				Render.WindowHeight * 0.5f + (float)((point1.y + point2.y) / 2f - camera.Position.y) * zoom);
+
+			Render.Window.Draw(shape);
+		}
 		#endregion
 	}
 }

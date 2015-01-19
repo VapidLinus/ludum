@@ -6,8 +6,6 @@ namespace Ludum.Engine
 {
 	abstract class Core
 	{
-
-
 		private readonly Render render;
 		private readonly Application application;
 		private readonly Input input;
@@ -31,17 +29,17 @@ namespace Ludum.Engine
 
 			// Update
 			var timer = Stopwatch.StartNew();
-			float time = 0;
+			double time = 0;
 			while (Render.Window.IsOpen())
 			{
 				// Record delta
-				float delta = timer.ElapsedTicks / (float)Stopwatch.Frequency;
+				double delta = timer.ElapsedTicks / (double)Stopwatch.Frequency;
 				timer.Restart();
 
-				render.ReportDelta((float)delta);
+				render.ReportDelta(delta);
 
 				// Display fps
-				if ((time += delta) >= .1f)
+				if ((time += delta) >= .1)
 				{
 					time = 0;
 					Console.WriteLine("FPS: " + Render.SmoothFPS);
@@ -65,7 +63,7 @@ namespace Ludum.Engine
 		}
 
 		protected virtual void OnInitialize() { }
-		protected virtual void OnUpdate(float delta)
+		protected virtual void OnUpdate(double delta)
 		{
 			Application.Scene.OnUpdate(delta);
 			input.Update();

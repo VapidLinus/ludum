@@ -1,4 +1,6 @@
 ﻿using System;
+using SFML.Window;
+using SFML.Graphics;
 
 namespace Ludum.Engine
 {
@@ -10,7 +12,7 @@ namespace Ludum.Engine
 			get 
 			{ 
 				ColliderPosition = Transform.Position; 
-				return Transform.Position + Vector2.Up * rectangle.Size.y / 2f; 
+				return Transform.Position + Vector2.Up * rectangle.Size.y / 2.0; 
 			}
 		}
 
@@ -22,11 +24,11 @@ namespace Ludum.Engine
 
 		public override Vector2 ColliderPosition
 		{
-			get { return rectangle.OriginPosition; }
+			get { return rectangle.Position; }
 			protected set
 			{
 				base.ColliderPosition = value;
-				rectangle.OriginPosition = value;
+				rectangle.CenterPosition = value;
 			}
 		}
 

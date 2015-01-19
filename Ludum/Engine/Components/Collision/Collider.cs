@@ -90,8 +90,8 @@ namespace Ludum.Engine
 			// Circle vs Circle
 			else if (type1 == typeof(CircleCollider) && type2 == typeof(CircleCollider))
 			{
-				float distanceSquared = (c1.ColliderPosition - c2.ColliderPosition).SquareMagnitude;
-				float combinedRadius = ((CircleCollider)c1).Radius + ((CircleCollider)c2).Radius;
+				double distanceSquared = (c1.ColliderPosition - c2.ColliderPosition).SquareMagnitude;
+				double combinedRadius = ((CircleCollider)c1).Radius + ((CircleCollider)c2).Radius;
 				return distanceSquared < combinedRadius * combinedRadius;
 			}
 
@@ -108,9 +108,9 @@ namespace Ludum.Engine
 			{
 				var circle = (CircleCollider)collider;
 
-				float distanceX = Math.Abs(circle.ColliderPosition.x - point.x);
-				float distanceY = Math.Abs(circle.ColliderPosition.y - point.y);
-				float distance = distanceX * distanceX + distanceY * distanceY;
+				double distanceX = Math.Abs(circle.ColliderPosition.x - point.x);
+				double distanceY = Math.Abs(circle.ColliderPosition.y - point.y);
+				double distance = distanceX * distanceX + distanceY * distanceY;
 
 				return distance < circle.Radius * circle.Radius;
 			}
@@ -127,8 +127,8 @@ namespace Ludum.Engine
 			var rectangle = box.Rectangle;
 
 			// Absolute distance
-			float distanceX = Math.Abs(circle.ColliderPosition.x - box.ColliderPosition.x);
-			float distanceY = Math.Abs(circle.ColliderPosition.y - box.ColliderPosition.y);
+			double distanceX = Math.Abs(circle.ColliderPosition.x - box.ColliderPosition.x);
+			double distanceY = Math.Abs(circle.ColliderPosition.y - box.ColliderPosition.y);
 
 			// Check if outside (top left)
 			if (distanceX > rectangle.Size.x / 2.0 + circle.Radius ||
@@ -139,8 +139,8 @@ namespace Ludum.Engine
 				distanceY < rectangle.Size.y / 2.0) return true;
 
 			// Corner distance
-			float x = distanceX - rectangle.Size.x / 2f;
-			float y = distanceY - rectangle.Size.y / 2f;
+			double x = distanceX - rectangle.Size.x / 2.0;
+			double y = distanceY - rectangle.Size.y / 2.0;
 
 			// Check if distance is lower than circle radius
 			// Don't use sqrt, but rather do radius^2 for performance

@@ -6,6 +6,9 @@ namespace Ludum.Engine
 {
 	public sealed class Scene : Behaviour
 	{
+		private Camera camera;
+		public Camera Camera { get { return camera == null ? camera = new Camera() : camera; } }
+
 		private readonly Dictionary<GameObject, bool> gameObjects;
 		public IReadOnlyCollection<GameObject> GameObjects { get { return gameObjects.Keys.ToList().AsReadOnly(); } }
 
@@ -27,7 +30,7 @@ namespace Ludum.Engine
 			gameObject.Destroyed += new DestroyedEventHandler(OnGameObjectDestroyed);
 		}
 
-		public override void OnUpdate(float delta)
+		public override void OnUpdate(double delta)
 		{
 			if (!isInitialized)
 			{

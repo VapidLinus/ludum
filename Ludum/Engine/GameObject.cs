@@ -60,7 +60,7 @@ namespace Ludum.Engine
 			return Components.OfType<T>().Select(component => component as T).FirstOrDefault();
 		}
 
-		public override void OnUpdate(float delta)
+		public override void OnUpdate(double delta)
 		{
 			// Call start in newly added components
 			foreach (var keyValuePair in components.ToArray().Where(pair => !pair.Value))

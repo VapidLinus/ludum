@@ -7,11 +7,13 @@ namespace Ludum.TestGame
 {
 	public class Player : GameObject
 	{
+		private static Random random = new Random();
+
 		private Keyboard.Key keyUp, keyDown, keyLeft, keyRight;
 
 		private Vector2 velocity = Vector2.Zero;
 
-		private RoundedBoxRenderer renderer;
+		private RectangleRenderer renderer;
 		private BoxCollider collider;
 
 		private bool doubleJumped = true;
@@ -39,52 +41,55 @@ namespace Ludum.TestGame
 		{
 			base.OnStart();
 
-			renderer = AddComponent<RoundedBoxRenderer>();
+			renderer = AddComponent<RectangleRenderer>();
 			collider = AddComponent<BoxCollider>();
 
-			renderer.Radius = 2f;
-			renderer.Size = collider.Size = Vector2.One * 40;
+			renderer.Size = collider.Size = Vector2.One * .8;
+
+			// renderer.Radius = 2f;
+			// renderer.Size = collider.Size = Vector2.One * 40;
 		}
 
-		public override void OnUpdate(float delta)
+		public override void OnUpdate(double delta)
 		{
 			base.OnUpdate(delta);
 
-			// renderer.Radius = ((float)Math.Sin(Render.Time * 10) + 1f) * 5 + 4;
-			collider.Size = renderer.Size =  Vector2.One * ((float)Math.Sin(Render.Time * 2) + 1f) * 10 + Vector2.One * 10;
-			Console.WriteLine(renderer.Size);
+			Application.Scene.Camera.Zoom = 50 + 20 * Math.Sin(Render.Time * 5f);
+			Application.Scene.Camera.Position = Vector2.Right * 4 * Math.Sin(Render.Time * 1f);
 
 			// Input
-			float input = 0f;
+			double inputX = 0f;
 			if (Input.IsKeyDown(keyLeft))
 			{
-				input--;
+				inputX--;
 			}
 			if (Input.IsKeyDown(keyRight))
 			{
-				input++;
+				inputX++;
 			}
-			velocity.x += MathUtil.Clamp(input, -1, 1);
+			velocity.x += MathUtil.Clamp(inputX, -1, 1) * .1;
 
 			if (Input.IsKeyPressed(keyUp))
 			{
-				if ((doubleJumped) || collider.Overlap(Position + Vector2.Down * .1f) != null)
+				if ((doubleJumped) || collider.Overlap(Position + Vector2.Down * .1) != null)
 				{
-					velocity.y = 600;
+					Console.WriteLine("Hopp!");
+					velocity.y = 16;
 					doubleJumped = !doubleJumped;
 				}
 			}
 
 			// Friction and gravity
-			velocity.x *= (float)Math.Pow(0.001f, delta);
-			velocity.y -= delta * 1800;
+			velocity.x *= Math.Pow(0.0001, delta);
+			velocity.y -= delta * 16;
 
 			// Collision Y
 			Collider other;
-			float nextY = Position.y + velocity.y * delta;
+			double nextY = Position.y + velocity.y * delta;
+			if (nextY >= Position.y) Console.WriteLine("Above! {0}vs{1}", Position.y, nextY);
 			if ((other = collider.Overlap(new Vector2(Position.x, nextY))) != null)
 			{
-				if (velocity.y < 0) Position = new Vector2(Position.x, other.Top.y + collider.Size.y / 2f);
+				if (velocity.y < 0) Position = new Vector2(Position.x, other.Top.y + collider.Size.y * .5);
 				velocity.y = 0;
 				doubleJumped = false;
 			}
@@ -97,6 +102,9 @@ namespace Ludum.TestGame
 			}
 
 			Position += velocity * delta;
+
+			if (Input.IsKeyPressed(keyUp))
+				System.Threading.Thread.Sleep(1000);
 		}
 	}
 }

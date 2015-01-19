@@ -8,15 +8,8 @@ namespace Ludum.TestGame
 	{
 		public Wall()
 		{
-			var r = AddComponent<ShapeRenderer>();
-			r.SetShape(new RectangleShape(new Vector2f(40, 40)));
-			var b = AddComponent<BoxCollider>();
-			b.Size = new Vector2(40, 40);
-		}
-
-		public override void OnUpdate(float delta)
-		{
-			base.OnUpdate(delta);
+			AddComponent<RectangleRenderer>();
+			AddComponent<BoxCollider>();
 		}
 	}
 }
