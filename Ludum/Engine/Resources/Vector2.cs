@@ -130,7 +130,6 @@ namespace Ludum.Engine
 
 		public static explicit operator Vector2f(Vector2 other)
 		{
-			if (other == null) throw new InvalidOperationException();
 			return new Vector2f((float)other.x, (float)other.y);
 		}
 		#endregion

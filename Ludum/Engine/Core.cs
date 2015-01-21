@@ -49,7 +49,7 @@ namespace Ludum.Engine
 				Render.Window.DispatchEvents();
 
 				// Update
-				OnUpdate(delta);
+				OnUpdate();
 
 				// Render
 				Render.Window.Clear(new Color(0, 150, 255));
@@ -63,9 +63,9 @@ namespace Ludum.Engine
 		}
 
 		protected virtual void OnInitialize() { }
-		protected virtual void OnUpdate(double delta)
+		protected virtual void OnUpdate()
 		{
-			Application.Scene.OnUpdate(delta);
+			Application.Scene.OnUpdate();
 			input.Update();
 		}
 		protected virtual void OnRender() { Application.Scene.OnRender(); }

@@ -1,7 +1,4 @@
 ﻿using System;
-using Ludum.Engine;
-using SFML.Window;
-using SFML.Graphics;
 
 namespace Ludum.Engine
 {
@@ -42,16 +39,11 @@ namespace Ludum.Engine
 		#region Collision
 		public bool Intersects(Rectangle other)
 		{
-			bool b =
-				other.Position.x + other.Size.x > this.position.x &&
-				other.Position.x < this.position.x + this.Size.x &&
-				other.Position.y + other.Size.y > this.position.y &&
-				other.Position.y < this.position.y + this.Size.y;
-
-			if (b)
-				Console.WriteLine("{0} vs {1} = {2}", this, other, b);
-
-			return b;
+			return
+				other.Position.x + other.Size.x > position.x &&
+				other.Position.x < position.x + Size.x &&
+				other.Position.y + other.Size.y > position.y &&
+				other.Position.y < position.y + Size.y;
 		}
 
 		public bool Intersects(Vector2 point)

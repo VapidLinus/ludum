@@ -30,7 +30,7 @@ namespace Ludum.Engine
 			gameObject.Destroyed += new DestroyedEventHandler(OnGameObjectDestroyed);
 		}
 
-		public override void OnUpdate(double delta)
+		public override void OnUpdate()
 		{
 			if (!isInitialized)
 			{
@@ -50,7 +50,7 @@ namespace Ludum.Engine
 			for (int i = 0; i < objects.Length; i++)
 			{
 				// TODO: Must check if OnUpdate can get called on destroyed oboects
-				objects[i].OnUpdate(delta);
+				objects[i].OnUpdate();
 			}
 		}
 

@@ -38,7 +38,7 @@ namespace Ludum.Engine
 			shape.Origin = shape.Size * 0.5f;
 			shape.Position = new Vector2f(
 				Render.WindowWidth * 0.5f + (float)(Transform.Position.x - camera.Position.x) * zoom,
-				Render.WindowHeight * 0.5f + (float)(-Transform.Position.y - camera.Position.y) * zoom);
+				Render.WindowHeight * 0.5f + (float)-(Transform.Position.y - camera.Position.y) * zoom);
 
 			Render.Window.Draw(shape);
 		}

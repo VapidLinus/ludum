@@ -9,11 +9,7 @@ namespace Ludum.Engine
 		public Vector2 Position
 		{
 			get { return position; }
-			set
-			{
-				if (value == null) throw new ArgumentNullException("position");
-				position = value;
-			}
+			set { position = value; }
 		}
 
 		private float rotation = 0;

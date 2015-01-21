@@ -19,7 +19,7 @@ namespace Ludum.Engine
 			return shape as T;
 		}
 
-		public override void OnUpdate(double delta)
+		public override void OnUpdate()
 		{
 			if (shape == null) return;
 			shape.Position = (Vector2f)GameObject.GetComponent<Transform>().Position;

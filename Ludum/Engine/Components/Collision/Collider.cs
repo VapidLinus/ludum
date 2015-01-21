@@ -19,8 +19,6 @@ namespace Ludum.Engine
 		}
 		public override void OnDestroy()
 		{
-			base.OnDestroy();
-
 			colliders.Remove(this);
 		}
 

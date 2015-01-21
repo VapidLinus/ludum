@@ -1,12 +1,9 @@
-﻿using System;
-using SFML.Window;
-using SFML.Graphics;
-
-namespace Ludum.Engine
+﻿namespace Ludum.Engine
 {
 	public class BoxCollider : Collider
 	{
 		private Rectangle rectangle = new Rectangle(Vector2.Zero, Vector2.One);
+
 		public override Vector2 Top
 		{
 			get 
