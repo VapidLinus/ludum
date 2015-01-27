@@ -1,18 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using Ludum.Engine;
-using SFML.Graphics;
 
 namespace Ludum.Engine
 {
-	public delegate void DestroyedEventHandler(GameObject sender);
-
-	public class GameObject : Behaviour
+	public sealed class GameObject : Behaviour
 	{
 		public readonly Transform Transform;
 		private readonly Dictionary<Component, bool> components;
+		private byte renderLayer = Render.DEFAULT_RENDER_LAYER;
+
+		public byte RenderLayer
+		{
+			get { return renderLayer; }
+			set
+			{
+				renderLayer = MathUtil.Clamp(value, Render.LOWEST_RENDER_LAYER, Render.HIGHEST_RENDER_LAYER);
+				Render.RebuildRenderOrder();
+			}
+		}
 
 		public IReadOnlyCollection<Component> Components
 		{
@@ -29,9 +35,6 @@ namespace Ludum.Engine
 			get { return Transform.Position; }
 			set { Transform.Position = value; }
 		}
-
-		public event DestroyedEventHandler Destroyed;
-		private bool isDestroyed;
 
 		public GameObject() : this(Vector2.Zero) { }
 
@@ -83,18 +86,6 @@ namespace Ludum.Engine
 			{
 				component.OnRender();
 			}
-		}
-
-		public void Destroy()
-		{
-			// Can only destroy once
-			if (isDestroyed) return;
-			isDestroyed = true;
-
-			Destroyed(this);
-
-			// Destroy
-			OnDestroy();
 		}
 	}
 }

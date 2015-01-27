@@ -141,6 +141,12 @@ namespace Ludum.Engine
 		public static Vector2 Right { get { return new Vector2(1, 0); } }
 		public static Vector2 Left { get { return new Vector2(-1, 0); } }
 
+		public static double Distance(Vector2 v1, Vector2 v2)
+		{
+			double x = v1.x - v2.x;
+			double y = v1.y - v2.y;
+			return Math.Sqrt(x * x + y * y);
+		}
 		public static Vector2 Clamp(Vector2 vector, double min, double max)
 		{
 			return new Vector2(MathUtil.Clamp(vector.x, min, max), MathUtil.Clamp(vector.y, min, max)); ;
@@ -152,6 +158,14 @@ namespace Ludum.Engine
 		public static Vector2 Min(Vector2 vector, double value)
 		{
 			return new Vector2(Math.Min(vector.x, value), Math.Min(vector.y, value));
+		}
+		public static Vector2 Lerp(Vector2 v1, Vector2 v2, double value)
+		{
+			if (value > 1.0)
+				return v2;
+			else if (value < 0.0)
+				return v1;
+			return new Vector2(v1.x + (v2.x - v1.x) * value, v1.y + (v2.y - v1.y) * value);
 		}
 	}
 }

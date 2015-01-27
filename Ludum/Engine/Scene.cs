@@ -4,17 +4,18 @@ using System.Linq;
 
 namespace Ludum.Engine
 {
+	public delegate void GameObjectCreatedHandler(GameObject created);
+	public delegate void GameObjectDestroyedHandler(GameObject destroyed);
+
 	public sealed class Scene : Behaviour
 	{
-		private Camera camera;
-		public Camera Camera { get { return camera == null ? camera = new Camera() : camera; } }
+		public event GameObjectCreatedHandler GameObjectCreatedHandler;
+		public event GameObjectDestroyedHandler GameObjectDestroyedHandler;
 
 		private readonly Dictionary<GameObject, bool> gameObjects;
 		public IReadOnlyCollection<GameObject> GameObjects { get { return gameObjects.Keys.ToList().AsReadOnly(); } }
 
 		private bool isInitialized;
-
-		public bool IsDestroyed { get; private set; }
 
 		public Scene()
 		{
@@ -25,9 +26,10 @@ namespace Ludum.Engine
 		{
 			if (gameObjects.ContainsKey(gameObject)) throw new InvalidOperationException("Never manually register a game object.");
 
-			// Add to list and listen to destroyed event
+			// Add to list and listen to destroy event
 			gameObjects.Add(gameObject, false);
-			gameObject.Destroyed += new DestroyedEventHandler(OnGameObjectDestroyed);
+			Render.RebuildRenderOrder();
+			gameObject.OnDestroyHandler += new OnDestroyHandler(OnGameObjectDestroyed);
 		}
 
 		public override void OnUpdate()
@@ -41,8 +43,12 @@ namespace Ludum.Engine
 			// Call start in newly created game objects
 			foreach (var keyValuePair in gameObjects.ToArray().Where(pair => !pair.Value))
 			{
-				keyValuePair.Key.OnStart();
-				gameObjects[keyValuePair.Key] = true;
+				var gameObject = keyValuePair.Key;
+
+				if (GameObjectCreatedHandler != null)
+					GameObjectCreatedHandler(gameObject);
+				gameObject.OnStart();
+				gameObjects[gameObject] = true;
 			}
 
 			// Update
@@ -56,10 +62,7 @@ namespace Ludum.Engine
 
 		public override void OnRender()
 		{
-			foreach (var gameObject in GameObjects)
-			{
-				gameObject.OnRender();
-			}
+			
 		}
 
 		public override void OnDestroy()
@@ -72,11 +75,21 @@ namespace Ludum.Engine
 			}
 		}
 
-		private void OnGameObjectDestroyed(GameObject gameObject)
+		private void OnGameObjectDestroyed(Behaviour behaviour)
 		{
-			// Remove from list and stop listening to destroy event
+			Render.RebuildRenderOrder();
+
+			// We know the behaviour is a gameobject, as we only listen
+			// to the event when creating game objects
+			GameObject gameObject = behaviour as GameObject;
+
+			// Remove from list and stop listening to behaviour's destroy event
 			gameObjects.Remove(gameObject);
-			gameObject.Destroyed -= OnGameObjectDestroyed;
+			gameObject.OnDestroyHandler -= OnGameObjectDestroyed;
+
+			// Invoke gameobject destroyed event
+			if (GameObjectDestroyedHandler != null)
+				GameObjectDestroyedHandler(gameObject);
 		}
 	}
 }

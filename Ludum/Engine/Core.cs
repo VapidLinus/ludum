@@ -4,7 +4,7 @@ using SFML.Graphics;
 
 namespace Ludum.Engine
 {
-	abstract class Core
+	public abstract class Core
 	{
 		private readonly Render render;
 		private readonly Application application;
@@ -49,27 +49,27 @@ namespace Ludum.Engine
 				Render.Window.DispatchEvents();
 
 				// Update
+				Application.Scene.OnUpdate();
+				input.Update();
 				OnUpdate();
 
 				// Render
 				Render.Window.Clear(new Color(0, 150, 255));
+				render.RenderAll();
 				OnRender();
 				Render.Window.Display();
 			}
 
 			// Exit
 			OnUnloadContent();
+			Application.Scene.OnDestroy();
 			OnExit();
 		}
 
 		protected virtual void OnInitialize() { }
-		protected virtual void OnUpdate()
-		{
-			Application.Scene.OnUpdate();
-			input.Update();
-		}
-		protected virtual void OnRender() { Application.Scene.OnRender(); }
-		protected virtual void OnExit() { Application.Scene.OnDestroy(); }
+		protected virtual void OnUpdate() { }
+		protected virtual void OnRender() { }
+		protected virtual void OnExit() { }
 		protected virtual void OnLoadContent() { }
 		protected virtual void OnUnloadContent() { }
 	}

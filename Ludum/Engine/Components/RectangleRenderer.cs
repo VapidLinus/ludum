@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SFML.Graphics;
+﻿using SFML.Graphics;
 using SFML.Window;
 
 namespace Ludum.Engine
 {
-	class RectangleRenderer : Component
+	public class RectangleRenderer : Component
 	{
 		private RectangleShape shape;
 
@@ -23,22 +18,28 @@ namespace Ludum.Engine
 			}
 		}
 
+		public Color Color
+		{
+			get { return shape.FillColor; }
+			set { shape.FillColor = value; }
+		}
+
 		public override void OnAwake()
 		{
 			shape = new RectangleShape((Vector2f)size);
-		}
+        }
 
 		public override void OnRender()
 		{
-			Camera camera = Application.Scene.Camera;
+			if (Camera.Main == null) return;
 
-			float zoom = (float)camera.Zoom;
+			float zoom = (float)Camera.Main.Zoom;
 
 			shape.Scale = new Vector2f(zoom, zoom);
 			shape.Origin = shape.Size * 0.5f;
 			shape.Position = new Vector2f(
-				Render.WindowWidth * 0.5f + (float)(Transform.Position.x - camera.Position.x) * zoom,
-				Render.WindowHeight * 0.5f + (float)-(Transform.Position.y - camera.Position.y) * zoom);
+				Render.WindowWidth * 0.5f + (float)(Transform.Position.x - Camera.Main.Transform.Position.x) * zoom,
+				Render.WindowHeight * 0.5f + (float)-(Transform.Position.y - Camera.Main.Transform.Position.y) * zoom);
 
 			Render.Window.Draw(shape);
 		}

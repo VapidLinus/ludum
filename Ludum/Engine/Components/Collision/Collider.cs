@@ -13,8 +13,6 @@ namespace Ludum.Engine
 
 		public override void OnAwake()
 		{
-			base.OnAwake();
-
 			colliders.Add(this);
 		}
 		public override void OnDestroy()

@@ -8,7 +8,7 @@ namespace Ludum.Engine
 		public GameObject GameObject
 		{
 			get { return gameObject; }
-			set
+			internal set
 			{
 				if (gameObject != null) throw new InvalidOperationException("Setting gameobject is not allowed.");
 				gameObject = value;
@@ -19,7 +19,8 @@ namespace Ludum.Engine
 			get { return gameObject.Transform; }
 		}
 
-		protected internal Component() { }
+		protected Component() { }
+		
 
 		public virtual void OnAwake() { }
 	}
