@@ -19,7 +19,6 @@ namespace Ludum.Engine
 				Render.RebuildRenderOrder();
 			}
 		}
-
 		public IReadOnlyCollection<Component> Components
 		{
 			get
@@ -29,7 +28,6 @@ namespace Ludum.Engine
 				return list.AsReadOnly();
 			}
 		}
-
 		public Vector2 Position
 		{
 			get { return Transform.Position; }
@@ -63,15 +61,28 @@ namespace Ludum.Engine
 			return Components.OfType<T>().Select(component => component as T).FirstOrDefault();
 		}
 
+		public override void OnFixedUpdate()
+		{
+			// Loop through all components
+			Dictionary<Component, bool> componentsClone = new Dictionary<Component, bool>(components); // Clone
+			foreach (var pair in componentsClone)
+			{
+				var component = pair.Key;
+
+				// If not initialized
+				if (!pair.Value)
+				{
+					// Initialize
+					component.OnStart();
+					components[component] = true;
+				}
+
+				component.OnFixedUpdate();
+			}
+		}
+
 		public override void OnUpdate()
 		{
-			// Call start in newly added components
-			foreach (var keyValuePair in components.ToArray().Where(pair => !pair.Value))
-			{
-				keyValuePair.Key.OnStart();
-				components[keyValuePair.Key] = true;
-			}
-
 			// Update components
 			foreach (var component in Components)
 			{

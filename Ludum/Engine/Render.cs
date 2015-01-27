@@ -25,6 +25,7 @@ namespace Ludum.Engine
 		private const int SMOOTH_FPS_SAMPLES = 50;
 		private int fpsCurrentSample = 0;
 		private double[] fpsSamples = new double[SMOOTH_FPS_SAMPLES];
+		private double frameAlpha = 0;
 
 		// Render list
 		private List<GameObject> renderList;
@@ -59,6 +60,11 @@ namespace Ludum.Engine
 			if (fpsCurrentSample >= SMOOTH_FPS_SAMPLES) fpsCurrentSample = 0;
 		}
 
+		internal void ReportFrameAlpha(double alpha)
+		{
+			frameAlpha = alpha;
+		}
+
 		internal void RenderAll()
 		{
 			// If render list needs to be rebuilt
@@ -66,13 +72,13 @@ namespace Ludum.Engine
 			{
 				isRenderListDirty = false; // No longer dirty
 
-				List<GameObject> objects = new List<GameObject>();
-				var readonlyObjects = Application.Scene.GameObjects as IList<GameObject>;
+				// Prepare sort
+				List<GameObject> objects = new List<GameObject>(Application.Scene.GameObjects);
+				/*var readonlyObjects = Application.Scene.GameObjects as IList<GameObject>;
 				for (int i = 0; i < readonlyObjects.Count; i++)
-					objects.Add(readonlyObjects[i]);
-
+					objects.Add(readonlyObjects[i]);*/
 				renderList = new List<GameObject>();
-				
+
 				// Sort
 				for (byte i = 0; i < HIGHEST_RENDER_LAYER; i++)
 				{
@@ -115,13 +121,26 @@ namespace Ludum.Engine
 		}
 
 		public static double Time { get { return Instance.time; } }
-		public static double Delta { get { return Math.Min(Instance.delta, Instance.maxDelta); } }
+		public static double Delta
+		{
+			get
+			{
+				return Instance.core.updateState == Core.UpdateState.FixedUpdate ? FixedDelta :
+					Math.Min(RealDelta, Instance.maxDelta);
+			}
+		}
 		public static double RealDelta { get { return Instance.delta; } }
-		public static double Maxdelta
+		public static double FixedDelta
+		{
+			get { return Instance.core.fixedDelta; }
+			set { Instance.core.fixedDelta = Math.Max(value, float.Epsilon); }
+		}
+		public static double MaxDelta
 		{
 			get { return Instance.maxDelta; }
 			set { Instance.maxDelta = Math.Max(value, 0); }
 		}
+		public static double FrameAlpha { get { return Instance.frameAlpha; } }
 
 		public static void DrawRectangle(Vector2 point1, Vector2 point2, Color color)
 		{

@@ -6,9 +6,20 @@ namespace Ludum.Engine
 {
 	public abstract class Core
 	{
+		internal enum UpdateState
+		{
+			PreFrame,
+			FixedUpdate,
+			Update,
+			Render
+		}
+		internal UpdateState updateState = UpdateState.PreFrame;
+
 		private readonly Render render;
 		private readonly Application application;
 		private readonly Input input;
+
+		internal double fixedDelta = 1 / 30.0;
 
 		public Core()
 		{
@@ -30,18 +41,35 @@ namespace Ludum.Engine
 			// Update
 			var timer = Stopwatch.StartNew();
 			double time = 0;
+			double displayFPSTime = 0;
+
+			double accumulator = 0;
 			while (Render.Window.IsOpen())
 			{
 				// Record delta
 				double delta = timer.ElapsedTicks / (double)Stopwatch.Frequency;
 				timer.Restart();
-
 				render.ReportDelta(delta);
 
-				// Display fps
-				if ((time += delta) >= .1)
+				// Fixed update
+				accumulator += delta;
+				updateState = UpdateState.FixedUpdate;
+				while (accumulator >= fixedDelta)
 				{
-					time = 0;
+					Application.Scene.StoreState();
+					input.Update();
+					time += delta;
+					Application.Scene.OnFixedUpdate();
+					accumulator -= fixedDelta;
+				}
+
+				// Get alpha from fixed update
+				render.ReportFrameAlpha(accumulator / fixedDelta);
+
+				// Display fps
+				if ((displayFPSTime += delta) >= .1)
+				{
+					displayFPSTime = 0;
 					Console.WriteLine("FPS: " + Render.SmoothFPS);
 				}
 
@@ -49,15 +77,18 @@ namespace Ludum.Engine
 				Render.Window.DispatchEvents();
 
 				// Update
+				updateState = UpdateState.Update;
 				Application.Scene.OnUpdate();
-				input.Update();
 				OnUpdate();
 
 				// Render
+				updateState = UpdateState.Render;
 				Render.Window.Clear(new Color(0, 150, 255));
 				render.RenderAll();
 				OnRender();
 				Render.Window.Display();
+
+				updateState = UpdateState.PreFrame;
 			}
 
 			// Exit

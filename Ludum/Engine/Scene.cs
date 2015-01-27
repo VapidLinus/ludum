@@ -32,30 +32,43 @@ namespace Ludum.Engine
 			gameObject.OnDestroyHandler += new OnDestroyHandler(OnGameObjectDestroyed);
 		}
 
-		public override void OnUpdate()
+		public override void OnFixedUpdate()
 		{
+			// Initialize self if not already initialized
 			if (!isInitialized)
 			{
 				OnStart();
 				isInitialized = true;
 			}
 
-			// Call start in newly created game objects
-			foreach (var keyValuePair in gameObjects.ToArray().Where(pair => !pair.Value))
+			// Loop through all game objects
+			Dictionary<GameObject, bool> gameObjectsClone = new Dictionary<GameObject, bool>(gameObjects); // Clone
+			foreach (var pair in gameObjectsClone)
 			{
-				var gameObject = keyValuePair.Key;
+				var gameObject = pair.Key;
 
-				if (GameObjectCreatedHandler != null)
-					GameObjectCreatedHandler(gameObject);
-				gameObject.OnStart();
-				gameObjects[gameObject] = true;
+				// If not initialized
+				if (!pair.Value)
+				{
+					// Call created gameobject event
+					if (GameObjectCreatedHandler != null)
+						GameObjectCreatedHandler(gameObject);
+					// Initialize
+					gameObject.OnStart();
+					gameObjects[gameObject] = true;
+				}
+
+				gameObject.OnFixedUpdate();
 			}
+		}
 
+		public override void OnUpdate()
+		{
 			// Update
 			GameObject[] objects = GameObjects.ToArray();
 			for (int i = 0; i < objects.Length; i++)
 			{
-				// TODO: Must check if OnUpdate can get called on destroyed oboects
+				// TODO: Must check if OnUpdate can get called on destroyed objects
 				objects[i].OnUpdate();
 			}
 		}
@@ -72,6 +85,15 @@ namespace Ludum.Engine
 			foreach (var gameObject in GameObjects)
 			{
 				gameObject.Destroy();
+			}
+		}
+
+		internal void StoreState()
+		{
+			foreach (var pair in gameObjects)
+			{
+				var gameObject = pair.Key;
+				gameObject.Transform.LastPosition = gameObject.Transform.Position;
 			}
 		}
 

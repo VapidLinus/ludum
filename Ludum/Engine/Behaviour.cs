@@ -37,10 +37,22 @@
 		}
 
 		public virtual void OnStart() { }
+		public virtual void OnFixedUpdate() { }
 		public virtual void OnUpdate() { }
 		public virtual void OnRender() { }
 		public virtual void OnDestroy() { }
 
+		public override int GetHashCode()
+		{
+			return instanceID;
+		}
+		public override bool Equals(object obj)
+		{
+			if (isDestroyed && ReferenceEquals(obj, null)) return true;
+			Behaviour other = obj as Behaviour;
+			if (ReferenceEquals(other, null)) return false;
+			return this == other;
+		}
 		public static bool operator ==(Behaviour b1, Behaviour b2)
 		{
 			bool b1Null = ReferenceEquals(b1, null);
@@ -65,7 +77,6 @@
 			if (b1Null) return b2.IsDestroyed;
 			else return b1.IsDestroyed;
 		}
-
 		public static bool operator !=(Behaviour b1, Behaviour b2)
 		{
 			return !(b1 == b2);

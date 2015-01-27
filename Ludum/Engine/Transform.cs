@@ -1,7 +1,4 @@
-﻿using System;
-using Ludum.Engine;
-
-namespace Ludum.Engine
+﻿namespace Ludum.Engine
 {
 	public class Transform : Component
 	{
@@ -10,6 +7,18 @@ namespace Ludum.Engine
 		{
 			get { return position; }
 			set { position = value; }
+		}
+
+		private Vector2 lastPosition;
+		public Vector2 LastPosition
+		{
+			get { return lastPosition; }
+			internal set { lastPosition = value; }
+		}
+
+		public Vector2 RenderPosition
+		{
+			get { return position * Render.FrameAlpha + lastPosition * (1.0 - Render.FrameAlpha); }
 		}
 
 		private float rotation = 0;

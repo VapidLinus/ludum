@@ -38,8 +38,8 @@ namespace Ludum.Engine
 			shape.Scale = new Vector2f(zoom, zoom);
 			shape.Origin = shape.Size * 0.5f;
 			shape.Position = new Vector2f(
-				Render.WindowWidth * 0.5f + (float)(Transform.Position.x - Camera.Main.Transform.Position.x) * zoom,
-				Render.WindowHeight * 0.5f + (float)-(Transform.Position.y - Camera.Main.Transform.Position.y) * zoom);
+				Render.WindowWidth * 0.5f + (float)(Transform.RenderPosition.x - Camera.Main.Transform.RenderPosition.x) * zoom,
+				Render.WindowHeight * 0.5f + (float)-(Transform.RenderPosition.y - Camera.Main.Transform.RenderPosition.y) * zoom);
 
 			Render.Window.Draw(shape);
 		}
