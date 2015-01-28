@@ -20,7 +20,7 @@ namespace Ludum.Engine
 			colliders.Remove(this);
 		}
 
-		public Collider Overlap(Vector2 position)
+		public Collision Overlap(Vector2 position)
 		{
 			return CheckCollision(this, position);
 		}
@@ -41,8 +41,8 @@ namespace Ludum.Engine
 		/// Check if the specified collider is colliding with another.
 		/// </summary>
 		/// <param name="collider">The collider to check collision for</param>
-		/// <returns>The collider it collides with, or null</returns>
-		public static Collider CheckCollision(Collider collider)
+		/// <returns>The collider info, or null if no collision</returns>
+		public static Collision CheckCollision(Collider collider)
 		{
 			return CheckCollision(collider, collider.Transform.Position);
 		}
@@ -53,8 +53,8 @@ namespace Ludum.Engine
 		/// </summary>
 		/// <param name="collider">The collider to check collision for</param>
 		/// <param name="position">The position to check collosion from</param>
-		/// <returns>The collider it collides with, or null</returns>
-		public static Collider CheckCollision(Collider collider, Vector2 position)
+		/// <returns>The collider info, or null if no collision</returns>
+		public static Collision CheckCollision(Collider collider, Vector2 position)
 		{
 			collider.ColliderPosition = position;
 			for (int i = 0; i < colliders.Count; i++)
@@ -63,13 +63,14 @@ namespace Ludum.Engine
 
 				if (collider == other) continue;
 				other.ColliderPosition = other.Transform.Position;
-				if (CheckTwoColliders(collider, other)) return other;
+				var result = CheckTwoColliders(collider, other);
+				if (result != null) return result;
 			}
 			return null;
 		}
 
 		#region Internal
-		private static bool CheckTwoColliders(Collider c1, Collider c2)
+		private static Collision CheckTwoColliders(Collider c1, Collider c2)
 		{
 			// Store types
 			var type1 = c1.GetType();
@@ -77,8 +78,13 @@ namespace Ludum.Engine
 
 			// Box vs Box
 			if (type1 == typeof(BoxCollider) && type2 == typeof(BoxCollider))
-			{ return ((BoxCollider)c1).Rectangle.Intersects(((BoxCollider)c2).Rectangle); }
-			// Box vs Circle
+			{
+				//return ((BoxCollider)c1).Rectangle.Intersects(((BoxCollider)c2).Rectangle);
+				Vector2? direction = ((BoxCollider)c1).Rectangle.IntersectDirection(((BoxCollider)c2).Rectangle);
+				if (direction == null) return null;
+				return new Collision(c2, (Vector2)direction, (Vector2)direction * ((BoxCollider)c2).Rectangle.Size + c2.Transform.Position);
+			}
+			/*// Box vs Circle
 			else if (type1 == typeof(BoxCollider) && type2 == typeof(CircleCollider))
 			{ return CheckBoxCircleCollision((BoxCollider)c1, (CircleCollider)c2); }
 			else if (type1 == typeof(CircleCollider) && type2 == typeof(BoxCollider))
@@ -89,12 +95,11 @@ namespace Ludum.Engine
 				double distanceSquared = (c1.ColliderPosition - c2.ColliderPosition).SquareMagnitude;
 				double combinedRadius = ((CircleCollider)c1).Radius + ((CircleCollider)c2).Radius;
 				return distanceSquared < combinedRadius * combinedRadius;
-			}
+			}*/
 
 			// Not implemented :(
 			throw new NotImplementedException("Collision between " + type1 + " and " + type2 + " is not supported.");
 		}
-
 		private static bool CheckCollisionPoint(Collider collider, Vector2 point)
 		{
 			var type = collider.GetType();
@@ -114,7 +119,6 @@ namespace Ludum.Engine
 			// Not implemented :(
 			throw new NotImplementedException("Collision between " + type + " and Vector2 is not supported.");
 		}
-
 		private static bool CheckBoxCircleCollision(BoxCollider box, CircleCollider circle)
 		{
 			// Solution based on e.James's answer

@@ -80,6 +80,7 @@
     <Compile Include="Engine\Components\Collision\CircleCollider.cs" />
     <Compile Include="Engine\Components\Collision\BoxCollider.cs" />
     <Compile Include="Engine\Components\Collision\Collider.cs" />
+    <Compile Include="Engine\Components\Collision\Collision.cs" />
     <Compile Include="Engine\Components\RectangleOutlineRenderer.cs" />
     <Compile Include="Engine\Components\RectangleRenderer.cs" />
     <Compile Include="Engine\Components\RoundedBoxRenderer.cs" />

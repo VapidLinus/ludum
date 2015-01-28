@@ -33,10 +33,37 @@ namespace Ludum.Engine
 
 		public override string ToString()
 		{
-			return String.Format("Rect({0},{1},{2},{3})", position.x, position.y, position.x + size.x, position.y + size.y);
+			return string.Format("Rect({0},{1},{2},{3})", position.x, position.y, position.x + size.x, position.y + size.y);
 		}
 
 		#region Collision
+		public Vector2? IntersectDirection(Rectangle other)
+		{
+			double difX = other.Position.x - Position.x;
+			double difXAbs = Math.Abs(difX);
+			double sizeX = Math.Abs((Size.x + other.Size.x) / 2.0);
+            bool colX = difXAbs < sizeX;
+
+			double difY = other.Position.y - Position.y;
+			double difYAbs = Math.Abs(difY);
+			double sizeY = Math.Abs((Size.y + other.Size.y) / 2.0);
+			bool colY = difYAbs < sizeY;
+
+			/*Console.WriteLine("---");
+			Console.WriteLine("Dif x: {0} Size x: {1}", difXAbs, sizeX);
+			Console.WriteLine("Dif y: {0} Size y: {1}", difYAbs, sizeY);*/
+
+			if (colX && colY)
+			{
+				if (difXAbs > difYAbs)
+					return difX > 0 ? Vector2.Right : Vector2.Left;
+				else
+					return difY > 0 ? Vector2.Up : Vector2.Down;
+			}
+
+			return null;
+		}
+
 		public bool Intersects(Rectangle other)
 		{
 			return
@@ -48,7 +75,7 @@ namespace Ludum.Engine
 
 		public bool Intersects(Vector2 point)
 		{
-			return this.Intersects(new Rectangle(point, Vector2.Zero));
+			return Intersects(new Rectangle(point, Vector2.Zero));
 		}
 		#endregion
 		#region Static
