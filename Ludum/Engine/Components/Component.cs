@@ -20,7 +20,6 @@ namespace Ludum.Engine
 		}
 
 		protected Component() { }
-		
 
 		public virtual void OnAwake() { }
 	}

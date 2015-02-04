@@ -50,6 +50,7 @@ namespace Ludum.Engine
 			var component = new T { GameObject = this };
 			if (component is Transform) throw new InvalidOperationException("Can't add Transform component");
 			component.OnAwake();
+			component.OnDestroyHandler += OnComponentDestroyed;
 
 			// Add
 			components.Add(component, false);
@@ -97,6 +98,12 @@ namespace Ludum.Engine
 			{
 				component.OnRender();
 			}
+		}
+
+		void OnComponentDestroyed(Behaviour component)
+		{
+			component.OnDestroyHandler -= OnComponentDestroyed;
+			components.Remove((Component)component);
 		}
 	}
 }

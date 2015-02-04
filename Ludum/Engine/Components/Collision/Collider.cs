@@ -82,7 +82,10 @@ namespace Ludum.Engine
 				//return ((BoxCollider)c1).Rectangle.Intersects(((BoxCollider)c2).Rectangle);
 				Vector2? direction = ((BoxCollider)c1).Rectangle.IntersectDirection(((BoxCollider)c2).Rectangle);
 				if (direction == null) return null;
-				return new Collision(c2, (Vector2)direction, (Vector2)direction * ((BoxCollider)c2).Rectangle.Size + c2.Transform.Position);
+				return new Collision(
+					c2, 
+					(Vector2)direction,
+					(Vector2)direction * ((BoxCollider)c2).Rectangle.Size * .5 + c2.Transform.Position);
 			}
 			/*// Box vs Circle
 			else if (type1 == typeof(BoxCollider) && type2 == typeof(CircleCollider))

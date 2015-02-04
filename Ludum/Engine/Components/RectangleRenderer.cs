@@ -37,9 +37,11 @@ namespace Ludum.Engine
 
 			shape.Scale = new Vector2f(zoom, zoom);
 			shape.Origin = shape.Size * 0.5f;
-			shape.Position = new Vector2f(
-				Render.WindowWidth * 0.5f + (float)(Transform.RenderPosition.x - Camera.Main.Transform.RenderPosition.x) * zoom,
-				Render.WindowHeight * 0.5f + (float)-(Transform.RenderPosition.y - Camera.Main.Transform.RenderPosition.y) * zoom);
+			shape.Position = Camera.Main.WorldToScreenInvertedY(Transform.RenderPosition);
+
+			//shape.Position = new Vector2f(
+			//	Render.WindowWidth * 0.5f + (float)(Transform.RenderPosition.x - Camera.Main.Transform.RenderPosition.x) * zoom,
+			//	Render.WindowHeight * 0.5f + (float)-(Transform.RenderPosition.y - Camera.Main.Transform.RenderPosition.y) * zoom);
 
 			Render.Window.Draw(shape);
 		}

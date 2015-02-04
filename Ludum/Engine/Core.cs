@@ -83,7 +83,7 @@ namespace Ludum.Engine
 
 				// Render
 				updateState = UpdateState.Render;
-				Render.Window.Clear(new Color(0, 150, 255));
+				Render.Window.Clear(new SFML.Graphics.Color(0, 150, 255));
 				render.RenderAll();
 				OnRender();
 				Render.Window.Display();

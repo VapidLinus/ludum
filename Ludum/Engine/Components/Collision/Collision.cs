@@ -10,6 +10,7 @@
 		{
 			this.collider = collider;
 			this.direction = direction;
+			this.position = position;
 		}
 	}
 }

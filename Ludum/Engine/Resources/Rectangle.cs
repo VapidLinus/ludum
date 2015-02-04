@@ -31,6 +31,23 @@ namespace Ludum.Engine
 			this.size = size;
 		}
 
+		public Vector2 GetEdgeDirection(Vector2 direction)
+		{
+			if (!direction.IsNormalized) direction.Normalize();
+			double magnitude = 0;
+
+			double angle = direction.ToAngle(direction);
+			double absCosAngle = Math.Abs(Math.Cos(angle));
+			double absSinAngle = Math.Abs(Math.Sin(angle));
+
+			if (Size.x / 2.0 * absSinAngle <= Size.y / 2.0 * absCosAngle)
+				magnitude = Size.x / 2.0 / absCosAngle;
+			else
+				magnitude = Size.y / 2.0 / absSinAngle;
+
+			return direction * magnitude;
+		}
+
 		public override string ToString()
 		{
 			return string.Format("Rect({0},{1},{2},{3})", position.x, position.y, position.x + size.x, position.y + size.y);
@@ -39,26 +56,26 @@ namespace Ludum.Engine
 		#region Collision
 		public Vector2? IntersectDirection(Rectangle other)
 		{
-			double difX = other.Position.x - Position.x;
-			double difXAbs = Math.Abs(difX);
-			double sizeX = Math.Abs((Size.x + other.Size.x) / 2.0);
+			double difX = other.CenterPosition.x - CenterPosition.x;
+			float difXAbs = (float)Math.Abs(difX);
+			float sizeX = (float)Math.Abs((Size.x + other.Size.x) / 2.0);
             bool colX = difXAbs < sizeX;
 
-			double difY = other.Position.y - Position.y;
-			double difYAbs = Math.Abs(difY);
-			double sizeY = Math.Abs((Size.y + other.Size.y) / 2.0);
-			bool colY = difYAbs < sizeY;
+			double difY = other.CenterPosition.y - CenterPosition.y;
+			float difYAbs = (float)Math.Abs(difY);
+			float sizeY = (float)Math.Abs((Size.y + other.Size.y) / 2.0);
+			bool colY = difYAbs - sizeY < 0;
 
-			/*Console.WriteLine("---");
-			Console.WriteLine("Dif x: {0} Size x: {1}", difXAbs, sizeX);
-			Console.WriteLine("Dif y: {0} Size y: {1}", difYAbs, sizeY);*/
+			//Console.WriteLine("Size Y: {0} vs {1}", Size.y, other.Size.y);
+			//Console.WriteLine("other y: {0}, my y: {1}", other.position.y, Position.y);
+			//Console.WriteLine("y: {0} < {1} = {2}", difYAbs.ToString(), sizeY.ToString(), colY);
 
 			if (colX && colY)
 			{
 				if (difXAbs > difYAbs)
-					return difX > 0 ? Vector2.Right : Vector2.Left;
+					return difX > 0 ? Vector2.Left : Vector2.Right;
 				else
-					return difY > 0 ? Vector2.Up : Vector2.Down;
+					return difY > 0 ? Vector2.Down : Vector2.Up;
 			}
 
 			return null;

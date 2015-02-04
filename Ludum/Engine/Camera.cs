@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using SFML.Window;
+using System;
+using System.Collections.Generic;
 
 namespace Ludum.Engine
 {
 	public class Camera : Component
 	{
 		private double zoom = 100;
-		public double Zoom { get { return zoom; } set { this.zoom = value; } }
+		public double Zoom { get { return zoom; } set { zoom = Math.Max(value, Double.Epsilon); } }
 
 		/// <summary>
 		/// Finds a camera in the scene. Automatically caches.
@@ -31,6 +33,23 @@ namespace Ludum.Engine
 				}
 				return null;
 			}
+		}
+
+		public Vector2f WorldToScreenInvertedY(Vector2 worldPosition)
+		{
+			return new Vector2f(
+				(float)(Render.WindowWidth * 0.5 + (worldPosition.x - Transform.RenderPosition.x) * zoom),
+				(float)(Render.WindowHeight * 0.5 + -(worldPosition.y - Transform.RenderPosition.y) * zoom));
+		}
+
+		public Vector2 ScreenToWorldInvertedY(Vector2f screenPosition)
+		{
+			double windowScale = 2 * Zoom;
+			double screenScale = 1 / Zoom;
+
+			return new Vector2(
+				Transform.RenderPosition.x - (Render.WindowWidth / windowScale) + screenPosition.X * screenScale,
+				Transform.RenderPosition.y + (Render.WindowHeight / windowScale) - screenPosition.Y * screenScale);
 		}
 	}
 }

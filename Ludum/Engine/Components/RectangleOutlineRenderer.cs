@@ -46,8 +46,8 @@ namespace Ludum.Engine
 
 			outline.GameObject.RenderLayer = Render.DEFAULT_RENDER_LAYER - 10;
 
-			OutlineColor = Color.Black;
-			MainColor = Color.White;
+			OutlineColor = SFML.Graphics.Color.Black;
+			MainColor = SFML.Graphics.Color.White;
 			Size = Vector2.One;
 			OutlineWidth = .1;
 		}

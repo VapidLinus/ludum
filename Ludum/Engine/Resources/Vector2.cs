@@ -36,6 +36,32 @@ namespace Ludum.Engine
 			}
 		}
 
+		public Vector2 SnapTo90
+		{
+			get
+			{
+				if (Math.Abs(x) >= Math.Abs(y))
+					return x >= 0 ? Right : Left;
+				else
+					return y >= 0 ? Up : Down;
+			}
+		}
+
+		/// <summary>
+		/// Returns whether the Vector is normalized, without a Sqrt call
+		/// </summary>
+		public bool IsNormalized
+		{
+			get
+			{
+				const double min = 1 - 1e-15;
+				const double max = 1 + 1e-15;
+
+				double len = SquareMagnitude;
+				return (len >= min && len <= max);
+			}
+		}
+
 		/// <summary>
 		/// Gets vector's magnitude.
 		/// </summary>
@@ -63,6 +89,16 @@ namespace Ludum.Engine
 				normalized.Normalize();
 				return normalized;
 			}
+		}
+
+		/// <summary>
+		/// Converts the vector to an angle
+		/// </summary>
+		/// <param name="vector">Vector to convert</param>
+		/// <returns>Angle from vector</returns>
+		public double ToAngle(Vector2 vector)
+		{
+			return Math.Atan2(vector.y, vector.x);
 		}
 
 		#region Object
@@ -96,6 +132,11 @@ namespace Ludum.Engine
 		public static Vector2 operator -(Vector2 v1, Vector2 v2)
 		{
 			return new Vector2(v1.x - v2.x, v1.y - v2.y);
+		}
+
+		public static Vector2 operator -(Vector2 v1)
+		{
+			return new Vector2(-v1.x, -v1.y);
 		}
 
 		public static Vector2 operator *(Vector2 v1, Vector2 v2)
@@ -141,6 +182,10 @@ namespace Ludum.Engine
 		public static Vector2 Right { get { return new Vector2(1, 0); } }
 		public static Vector2 Left { get { return new Vector2(-1, 0); } }
 
+		public static Vector2 FromAngle(float angle)
+		{
+			return new Vector2(Math.Cos(angle), Math.Sin(angle));
+		}
 		public static double Distance(Vector2 v1, Vector2 v2)
 		{
 			double x = v1.x - v2.x;
