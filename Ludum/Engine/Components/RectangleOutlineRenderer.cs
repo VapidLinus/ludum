@@ -56,5 +56,12 @@ namespace Ludum.Engine
 		{
 			outline.Transform.Position = mainshape.Transform.Position = Transform.Position;
 		}
+
+		public override void OnDestroy()
+		{
+			System.Console.WriteLine("OnDestroy");
+			outline.GameObject.Destroy();
+			mainshape.GameObject.Destroy();
+		}
 	}
 }

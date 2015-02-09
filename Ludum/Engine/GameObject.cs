@@ -100,6 +100,15 @@ namespace Ludum.Engine
 			}
 		}
 
+		public override void OnDestroy()
+		{
+			// Destroy components
+			foreach (var component in Components)
+			{
+				component.Destroy();
+			}
+		}
+
 		void OnComponentDestroyed(Behaviour component)
 		{
 			component.OnDestroyHandler -= OnComponentDestroyed;

@@ -19,7 +19,7 @@
 		public Behaviour()
 		{
 			instanceID = nextID++;
-        }
+		}
 
 		/// <summary>
 		/// Destroys the behaviour if it's not already destroyed.
@@ -28,6 +28,12 @@
 		public bool Destroy()
 		{
 			if (isDestroyed) return false;
+
+			System.Console.WriteLine("CAlling on destroy:");
+			OnDestroy();
+			System.Console.WriteLine("Done");
+
+			isDestroyed = true;
 
 			// Invoke event
 			if (OnDestroyHandler != null)
@@ -81,5 +87,5 @@
 		{
 			return !(b1 == b2);
 		}
-    }
+	}
 }

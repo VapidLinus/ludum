@@ -84,7 +84,6 @@
     <Compile Include="Engine\Components\RectangleOutlineRenderer.cs" />
     <Compile Include="Engine\Components\RectangleRenderer.cs" />
     <Compile Include="Engine\Components\RoundedBoxRenderer.cs" />
-    <Compile Include="Engine\Debug\RectangleDrawer.cs" />
     <Compile Include="Engine\Input.cs" />
     <Compile Include="Engine\Resources\ColorUtil.cs" />
     <Compile Include="Engine\Resources\MathUtil.cs" />
