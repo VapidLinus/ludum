@@ -5,7 +5,7 @@
 	public abstract class Behaviour
 	{
 		private static int nextID = 0;
-		private int instanceID;
+		public readonly int instanceID;
 
 		public event OnDestroyHandler OnDestroyHandler;
 
@@ -29,15 +29,15 @@
 		{
 			if (isDestroyed) return false;
 
-			System.Console.WriteLine("CAlling on destroy:");
+			// Call destroy method
 			OnDestroy();
-			System.Console.WriteLine("Done");
-
-			isDestroyed = true;
 
 			// Invoke event
 			if (OnDestroyHandler != null)
 				OnDestroyHandler(this);
+			
+			// Mark as destroyed
+			isDestroyed = true;
 
 			return true;
 		}

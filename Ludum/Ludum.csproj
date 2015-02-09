@@ -89,6 +89,7 @@
     <Compile Include="Engine\Resources\MathUtil.cs" />
     <Compile Include="Engine\Resources\Rectangle.cs" />
     <Compile Include="Engine\RenderMode.cs" />
+    <Compile Include="Engine\Resources\SRandom.cs" />
     <Compile Include="Engine\SingleInstance.cs" />
     <Compile Include="Engine\Application.cs" />
     <Compile Include="Engine\Components\Component.cs" />

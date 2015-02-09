@@ -111,7 +111,10 @@ namespace Ludum.Engine
 
 		void OnComponentDestroyed(Behaviour component)
 		{
+			// Unregister event
 			component.OnDestroyHandler -= OnComponentDestroyed;
+
+			// Destroy component
 			components.Remove((Component)component);
 		}
 	}

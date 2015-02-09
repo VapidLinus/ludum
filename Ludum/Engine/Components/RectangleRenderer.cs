@@ -1,5 +1,6 @@
 ﻿using SFML.Graphics;
 using SFML.Window;
+using System;
 
 namespace Ludum.Engine
 {
@@ -31,7 +32,7 @@ namespace Ludum.Engine
 
 		public override void OnRender()
 		{
-			if (Camera.Main == null) return;
+			if (Camera.Main == null || !IsOnScreen()) return;
 
 			float zoom = (float)Camera.Main.Zoom;
 
@@ -39,11 +40,24 @@ namespace Ludum.Engine
 			shape.Origin = shape.Size * 0.5f;
 			shape.Position = Camera.Main.WorldToScreenInvertedY(Transform.RenderPosition);
 
-			//shape.Position = new Vector2f(
-			//	Render.WindowWidth * 0.5f + (float)(Transform.RenderPosition.x - Camera.Main.Transform.RenderPosition.x) * zoom,
-			//	Render.WindowHeight * 0.5f + (float)-(Transform.RenderPosition.y - Camera.Main.Transform.RenderPosition.y) * zoom);
-
 			Render.Window.Draw(shape);
+		}
+
+		bool IsOnScreen()
+		{
+			var right = Camera.Main.WorldToScreenInvertedY(Transform.RenderPosition + Vector2.Right * Size.x * .5).X;
+			if (right < 0) return false;
+					
+			var left = Camera.Main.WorldToScreenInvertedY(Transform.RenderPosition + Vector2.Left * Size.x * .5).X;
+			if (left > Render.WindowWidth) return false;
+
+			var top = Camera.Main.WorldToScreenInvertedY(Transform.RenderPosition + Vector2.Up * Size.y * .5).Y;
+			if (top > Render.WindowHeight) return false;
+
+			var bottom = Camera.Main.WorldToScreenInvertedY(Transform.RenderPosition + Vector2.Down * Size.y * .5).Y;
+			if (bottom < 0) return false;
+
+			return true;
 		}
 	}
 }

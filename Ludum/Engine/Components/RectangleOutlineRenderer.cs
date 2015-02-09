@@ -46,8 +46,8 @@ namespace Ludum.Engine
 
 			outline.GameObject.RenderLayer = Render.DEFAULT_RENDER_LAYER - 10;
 
-			OutlineColor = SFML.Graphics.Color.Black;
-			MainColor = SFML.Graphics.Color.White;
+			OutlineColor = Color.Black;
+			MainColor = Color.White;
 			Size = Vector2.One;
 			OutlineWidth = .1;
 		}
@@ -59,7 +59,6 @@ namespace Ludum.Engine
 
 		public override void OnDestroy()
 		{
-			System.Console.WriteLine("OnDestroy");
 			outline.GameObject.Destroy();
 			mainshape.GameObject.Destroy();
 		}
