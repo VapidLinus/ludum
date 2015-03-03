@@ -29,6 +29,12 @@ namespace Ludum.Engine
 				outline.Size = new Vector2(size.x + outlineWidth * 2, size.y + outlineWidth * 2);
 			}
 		}
+		private float rotation;
+		public float Rotation
+		{
+			get { return rotation; }
+			set { rotation = mainshape.Rotation = outline.Rotation = value; }
+		}
 		public double OutlineWidth
 		{
 			get { return outlineWidth; }

@@ -38,5 +38,10 @@
 				return to;
 			return (to - from) * value + from;
 		}
+
+		public static float Lerp(float from, float to, float value)
+		{
+			return (float)Lerp(from, to, (double)value);
+		}
 	}
 }

@@ -69,6 +69,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -81,11 +82,15 @@
     <Compile Include="Engine\Components\Collision\BoxCollider.cs" />
     <Compile Include="Engine\Components\Collision\Collider.cs" />
     <Compile Include="Engine\Components\Collision\Collision.cs" />
+    <Compile Include="Engine\Components\ShapeOutlineRenderer.cs" />
     <Compile Include="Engine\Components\RectangleOutlineRenderer.cs" />
     <Compile Include="Engine\Components\RectangleRenderer.cs" />
     <Compile Include="Engine\Components\RoundedBoxRenderer.cs" />
+    <Compile Include="Engine\Components\ShapeRenderer.cs" />
     <Compile Include="Engine\Input.cs" />
     <Compile Include="Engine\Resources\ColorUtil.cs" />
+    <Compile Include="Engine\Resources\Config.cs" />
+    <Compile Include="Engine\Resources\Extentions\ExceptionExtensions.cs" />
     <Compile Include="Engine\Resources\MathUtil.cs" />
     <Compile Include="Engine\Resources\Rectangle.cs" />
     <Compile Include="Engine\RenderMode.cs" />
@@ -99,7 +104,6 @@
     <Compile Include="Engine\Core.cs" />
     <Compile Include="Engine\Resources\Vector2.cs" />
     <Compile Include="Engine\Scene.cs" />
-    <Compile Include="Engine\Components\ShapeRenderer.cs" />
     <Compile Include="Engine\Transform.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

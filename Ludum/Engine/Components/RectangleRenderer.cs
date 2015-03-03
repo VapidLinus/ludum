@@ -19,6 +19,12 @@ namespace Ludum.Engine
 			}
 		}
 
+		public float Rotation
+		{
+			get { return shape.Rotation; }
+			set { shape.Rotation = value; }
+		}
+
 		public Color Color
 		{
 			get { return shape.FillColor; }
@@ -28,7 +34,7 @@ namespace Ludum.Engine
 		public override void OnAwake()
 		{
 			shape = new RectangleShape((Vector2f)size);
-        }
+		}
 
 		public override void OnRender()
 		{
@@ -45,16 +51,18 @@ namespace Ludum.Engine
 
 		bool IsOnScreen()
 		{
-			var right = Camera.Main.WorldToScreenInvertedY(Transform.RenderPosition + Vector2.Right * Size.x * .5).X;
+			var camera = Camera.Main;
+
+			var right = camera.WorldToScreenX(Transform.RenderPosition.x + Size.x * .5);
 			if (right < 0) return false;
-					
-			var left = Camera.Main.WorldToScreenInvertedY(Transform.RenderPosition + Vector2.Left * Size.x * .5).X;
+
+			var left = camera.WorldToScreenX(Transform.RenderPosition.x - Size.x * .5);
 			if (left > Render.WindowWidth) return false;
 
-			var top = Camera.Main.WorldToScreenInvertedY(Transform.RenderPosition + Vector2.Up * Size.y * .5).Y;
+			var top = camera.WorldToScreenInvertedY(Transform.RenderPosition.y + Size.y * .5);
 			if (top > Render.WindowHeight) return false;
 
-			var bottom = Camera.Main.WorldToScreenInvertedY(Transform.RenderPosition + Vector2.Down * Size.y * .5).Y;
+			var bottom = camera.WorldToScreenInvertedY(Transform.RenderPosition.y - Size.y * .5);
 			if (bottom < 0) return false;
 
 			return true;

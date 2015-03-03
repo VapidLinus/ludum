@@ -31,12 +31,44 @@ namespace Ludum.Engine
 		private List<GameObject> renderList;
 		private bool isRenderListDirty = true;
 
-		internal Render(Core core)
-			: this(core, new RenderMode(new VideoMode(800, 450), "Ludum", Styles.Close))
-		{ }
-
-		internal Render(Core core, RenderMode renderMode)
+		private VideoMode LoadVideoMode()
 		{
+			uint width = 800;
+			uint height = 450;
+
+			try
+			{
+				width = uint.Parse(Application.Config.GetValue("screen-resolution-x", "800"));
+				height = uint.Parse(Application.Config.GetValue("screen-resolution-y", "450"));
+			}
+			catch (Exception e)
+			{
+				e.PrintStackTrace();
+			}
+
+			return new VideoMode(width, height);
+		}
+
+		private Styles LoadStyles()
+		{
+			bool isFullscreen = false;
+
+			try
+			{
+				isFullscreen = bool.Parse(Application.Config.GetValue("screen-resolution-fullscreen", "false"));
+			}
+			catch (Exception e)
+			{
+				e.PrintStackTrace();
+			}
+
+			return isFullscreen ? Styles.Fullscreen : Styles.Close;
+		}
+
+		internal Render(Core core)
+		{
+			var renderMode = new RenderMode(LoadVideoMode(), "Ludum", LoadStyles());
+
 			ContextSettings settings = new ContextSettings();
 			settings.AntialiasingLevel = 4;
 
@@ -74,9 +106,6 @@ namespace Ludum.Engine
 
 				// Prepare sort
 				List<GameObject> objects = new List<GameObject>(Application.Scene.GameObjects);
-				/*var readonlyObjects = Application.Scene.GameObjects as IList<GameObject>;
-				for (int i = 0; i < readonlyObjects.Count; i++)
-					objects.Add(readonlyObjects[i]);*/
 				renderList = new List<GameObject>();
 
 				// Sort

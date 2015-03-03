@@ -39,6 +39,7 @@ namespace Ludum.Engine
 		public GameObject(Vector2 position)
 		{
 			Transform = new Transform() { Position = position };
+			Transform.LastPosition = Transform.Position;
 			components = new Dictionary<Component, bool>();
 
 			Application.Scene.RegisterGameObject(this);

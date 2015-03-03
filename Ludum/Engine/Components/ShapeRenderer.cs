@@ -1,43 +1,63 @@
-﻿using System;
-using SFML.Graphics;
+﻿using SFML.Graphics;
 using SFML.Window;
 
 namespace Ludum.Engine
 {
 	public class ShapeRenderer : Component
 	{
-		private bool warnedNoShape = false;
-		private Shape shape;
-
-		public void SetShape(Shape shape)
+		public float Rotation
 		{
-			this.shape = shape;
+			get { return shape.Rotation; }
+			set { shape.Rotation = value; }
 		}
 
-		public T GetShape<T>() where T : Shape
+		public Color Color
 		{
-			return shape as T;
+			get { return shape.FillColor; }
+			set { shape.FillColor = value; }
 		}
 
-		public override void OnUpdate()
+		public Vector2 Origin
 		{
-			if (shape == null) return;
-			shape.Position = (Vector2f)GameObject.GetComponent<Transform>().Position;
-			shape.Position = new Vector2f(shape.Position.X, -shape.Position.Y);
+			get { return origin; }
+		}
+
+		private ConvexShape shape = new ConvexShape();
+		private Vector2 origin;
+
+		public void SetPoints(Vector2[] points)
+		{
+			shape.SetPointCount((uint)points.Length);
+			origin = Vector2.Zero;
+			for (uint i = 0; i < points.Length; i++)
+			{
+				Vector2 vector = points[i];
+                shape.SetPoint(i, vector.ToVector2f());
+				origin += vector;
+			}
+			origin /= points.Length;
+		}
+
+		public Vector2[] GetPoints()
+		{
+			Vector2[] points = new Vector2[shape.GetPointCount()];
+			for (uint i = 0; i < points.Length; i++)
+			{
+				points[i] = (Vector2)shape.GetPoint(i);
+			}
+			return points;
 		}
 
 		public override void OnRender()
 		{
-			if (shape == null)
-			{
-				if (!warnedNoShape)
-				{
-					Console.WriteLine("Warning: ShapeRenderer has no shape, will not render");
-					warnedNoShape = true;
-				}
-				return;
-			}
-			
+			if (Camera.Main == null || shape == null) return;
+
+			float zoom = (float)Camera.Main.Zoom;
+
+			shape.Scale = new Vector2f(zoom, zoom);
+			shape.Origin = origin.ToVector2f();
+            shape.Position = Camera.Main.WorldToScreenInvertedY(Transform.RenderPosition);
+
 			Render.Window.Draw(shape);
 		}
 	}

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
-using SFML.Graphics;
 
 namespace Ludum.Engine
 {
 	public abstract class Core
 	{
+
 		internal enum UpdateState
 		{
 			PreFrame,
@@ -23,8 +23,8 @@ namespace Ludum.Engine
 
 		public Core()
 		{
-			render = new Render(this);
 			application = new Application();
+			render = new Render(this);
 			input = new Input();
 		}
 
@@ -94,6 +94,7 @@ namespace Ludum.Engine
 			// Exit
 			OnUnloadContent();
 			Application.Scene.OnDestroy();
+			Application.Config.Save();
 			OnExit();
 		}
 

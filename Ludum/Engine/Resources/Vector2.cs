@@ -101,6 +101,11 @@ namespace Ludum.Engine
 			return Math.Atan2(vector.y, vector.x);
 		}
 
+		public Vector2f ToVector2f()
+		{
+			return new Vector2f((float)x, (float)y);
+		}
+
 		#region Object
 		public override bool Equals(object obj)
 		{
@@ -173,6 +178,11 @@ namespace Ludum.Engine
 		{
 			return new Vector2f((float)other.x, (float)other.y);
 		}
+
+		public static explicit operator Vector2(Vector2f v)
+		{
+			return new Vector2(v.X, v.Y);
+		}
 		#endregion
 
 		public static Vector2 Zero { get { return new Vector2(0, 0); } }
@@ -184,7 +194,7 @@ namespace Ludum.Engine
 
 		public static Vector2 FromAngle(float angle)
 		{
-			return new Vector2(Math.Cos(angle), Math.Sin(angle));
+			return new Vector2(Math.Cos(angle * Math.PI / 180.0), Math.Sin(angle * Math.PI / 180.0));
 		}
 		public static double Distance(Vector2 v1, Vector2 v2)
 		{

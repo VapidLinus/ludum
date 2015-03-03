@@ -37,9 +37,12 @@ namespace Ludum.Engine
 
 		public Vector2f WorldToScreenInvertedY(Vector2 worldPosition)
 		{
-			return new Vector2f(
+			/*return new Vector2f(
 				(float)(Render.WindowWidth * 0.5 + (worldPosition.x - Transform.RenderPosition.x) * zoom),
-				(float)(Render.WindowHeight * 0.5 + -(worldPosition.y - Transform.RenderPosition.y) * zoom));
+				(float)(Render.WindowHeight * 0.5 + -(worldPosition.y - Transform.RenderPosition.y) * zoom));*/
+			return new Vector2f(
+				WorldToScreenX(worldPosition.x),
+				WorldToScreenInvertedY(worldPosition.y));
 		}
 
 		public Vector2 ScreenToWorldInvertedY(Vector2f screenPosition)
@@ -50,6 +53,32 @@ namespace Ludum.Engine
 			return new Vector2(
 				Transform.RenderPosition.x - (Render.WindowWidth / windowScale) + screenPosition.X * screenScale,
 				Transform.RenderPosition.y + (Render.WindowHeight / windowScale) - screenPosition.Y * screenScale);
+		}
+
+		public float WorldToScreenX(double worldX)
+		{
+			return (float)(Render.WindowWidth * 0.5 + (worldX - Transform.RenderPosition.x) * zoom);
+        }
+
+		public float WorldToScreenInvertedY(double worldY)
+		{
+			return (float)(Render.WindowHeight * 0.5 + -(worldY - Transform.RenderPosition.y) * zoom);
+		}
+
+		public double ScreenToWorldX(float screenX)
+		{
+			double windowScale = 2 * Zoom;
+			double screenScale = 1 / Zoom;
+
+			return Transform.RenderPosition.x - (Render.WindowWidth / windowScale) + screenX * screenScale;
+		}
+
+		public double ScreenToWorldInvertedY(float screenY)
+		{
+			double windowScale = 2 * Zoom;
+			double screenScale = 1 / Zoom;
+
+			return Transform.RenderPosition.y + (Render.WindowHeight / windowScale) + screenY * screenScale;
 		}
 	}
 }

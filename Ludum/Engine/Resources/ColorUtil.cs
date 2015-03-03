@@ -11,7 +11,7 @@ namespace Ludum.Engine
 			else if (value < 0.0)
 				return c1;
 
-			return new SFML.Graphics.Color(
+			return new Color(
 				(byte)(c1.R + (c2.R - c1.R) * value),
 				(byte)(c1.G + (c2.G - c1.G) * value),
 				(byte)(c1.B + (c2.B - c1.B) * value));

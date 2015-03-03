@@ -32,6 +32,31 @@ namespace Ludum.Engine
 			gameObject.OnDestroyHandler += new OnDestroyHandler(OnGameObjectDestroyed);
 		}
 
+		public T FindComponent<T>() where T : Component
+		{
+			foreach (var gameobject in GameObjects)
+			{
+				foreach (var component in gameobject.Components)
+				{
+					if (component is T) return (T)component;
+				}
+			}
+			return null;
+		}
+
+		public List<T> FindComponents<T>() where T : Component
+		{
+			List<T> components = new List<T>();
+			foreach (var gameobject in GameObjects)
+			{
+				foreach (var component in gameobject.Components)
+				{
+					if (component is T) components.Add((T)component);
+				}
+			}
+			return components;
+		}
+
 		public override void OnFixedUpdate()
 		{
 			// Initialize self if not already initialized
