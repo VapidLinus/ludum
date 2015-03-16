@@ -8,6 +8,20 @@
 			get { return position; }
 			set { position = value; }
 		}
+		
+		private Vector2 scale = Vector2.One;
+		public Vector2 Scale
+		{
+			get { return scale; }
+			set { scale = value; }
+		}
+
+		private float rotation = 0;
+		public float Rotation
+		{
+			get { return rotation; }
+			set { rotation = value; }
+		}
 
 		private Vector2 lastPosition;
 		public Vector2 LastPosition
@@ -26,9 +40,6 @@
 		{
 			get { return position * Render.FrameAlpha + lastPosition * (1.0 - Render.FrameAlpha); }
 		}
-
-		private float rotation = 0;
-		public float Rotation { get { return rotation; } set { rotation = value; } }
 
 		public override string ToString()
 		{
