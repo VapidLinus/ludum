@@ -88,6 +88,7 @@
     <Compile Include="Engine\Components\RoundedBoxRenderer.cs" />
     <Compile Include="Engine\Components\ShapeRenderer.cs" />
     <Compile Include="Engine\Input.cs" />
+    <Compile Include="Engine\InputSystem.cs" />
     <Compile Include="Engine\Resources\ColorUtil.cs" />
     <Compile Include="Engine\Resources\Config.cs" />
     <Compile Include="Engine\Resources\Extentions\ExceptionExtensions.cs" />

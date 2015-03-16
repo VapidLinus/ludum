@@ -25,7 +25,7 @@ namespace Ludum.Engine
 		{
 			application = new Application();
 			render = new Render(this);
-			input = new Input();
+			input = new Input(this);
 		}
 
 		public void Run()
@@ -58,7 +58,7 @@ namespace Ludum.Engine
 				{
 					Application.Scene.StoreState();
 					time += delta;
-					input.Update();
+					input.FixedUpdate();
 					Application.Scene.OnFixedUpdate();
 					accumulator -= fixedDelta;
 					OnFixedUpdate();
@@ -79,7 +79,8 @@ namespace Ludum.Engine
 
 				// Update
 				updateState = UpdateState.Update;
-				
+
+				input.Update();
 				Application.Scene.OnUpdate();
 				OnUpdate();
 
