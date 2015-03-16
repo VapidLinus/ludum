@@ -35,17 +35,14 @@ namespace Ludum.Engine
 			}
 		}
 
-		public Vector2f WorldToScreenInvertedY(Vector2 worldPosition)
+		public Vector2f WorldToScreen(Vector2 worldPosition)
 		{
-			/*return new Vector2f(
-				(float)(Render.WindowWidth * 0.5 + (worldPosition.x - Transform.RenderPosition.x) * zoom),
-				(float)(Render.WindowHeight * 0.5 + -(worldPosition.y - Transform.RenderPosition.y) * zoom));*/
 			return new Vector2f(
 				WorldToScreenX(worldPosition.x),
-				WorldToScreenInvertedY(worldPosition.y));
+				WorldToScreenY(worldPosition.y));
 		}
 
-		public Vector2 ScreenToWorldInvertedY(Vector2f screenPosition)
+		public Vector2 ScreenToWorld(Vector2f screenPosition)
 		{
 			double windowScale = 2 * Zoom;
 			double screenScale = 1 / Zoom;
@@ -60,7 +57,7 @@ namespace Ludum.Engine
 			return (float)(Render.WindowWidth * 0.5 + (worldX - Transform.RenderPosition.x) * zoom);
         }
 
-		public float WorldToScreenInvertedY(double worldY)
+		public float WorldToScreenY(double worldY)
 		{
 			return (float)(Render.WindowHeight * 0.5 + -(worldY - Transform.RenderPosition.y) * zoom);
 		}
@@ -73,7 +70,7 @@ namespace Ludum.Engine
 			return Transform.RenderPosition.x - (Render.WindowWidth / windowScale) + screenX * screenScale;
 		}
 
-		public double ScreenToWorldInvertedY(float screenY)
+		public double ScreenToWorldY(float screenY)
 		{
 			double windowScale = 2 * Zoom;
 			double screenScale = 1 / Zoom;

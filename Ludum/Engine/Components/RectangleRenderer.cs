@@ -27,7 +27,7 @@ namespace Ludum.Engine
 			shape.Scale = new Vector2f(zoom, zoom);
 			shape.Origin = shape.Size * 0.5f;
 			shape.Rotation = Transform.Rotation;
-			shape.Position = Camera.Main.WorldToScreenInvertedY(Transform.RenderPosition);
+			shape.Position = Camera.Main.WorldToScreen(Transform.RenderPosition);
 
 			Render.Window.Draw(shape);
 		}
@@ -42,10 +42,10 @@ namespace Ludum.Engine
 			var left = camera.WorldToScreenX(Transform.RenderPosition.x - Transform.Scale.x * .5);
 			if (left > Render.WindowWidth) return false;
 
-			var top = camera.WorldToScreenInvertedY(Transform.RenderPosition.y + Transform.Scale.y * .5);
+			var top = camera.WorldToScreenY(Transform.RenderPosition.y + Transform.Scale.y * .5);
 			if (top > Render.WindowHeight) return false;
 
-			var bottom = camera.WorldToScreenInvertedY(Transform.RenderPosition.y - Transform.Scale.y * .5);
+			var bottom = camera.WorldToScreenY(Transform.RenderPosition.y - Transform.Scale.y * .5);
 			if (bottom < 0) return false;
 
 			return true;
