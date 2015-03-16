@@ -171,7 +171,7 @@ namespace Ludum.Engine
 		}
 		public static double FrameAlpha { get { return Instance.frameAlpha; } }
 
-		public static void DrawRectangle(Vector2 point1, Vector2 point2, SFML.Graphics.Color color)
+		public static void DrawRectangle(Vector2 point1, Vector2 point2, Color color)
 		{
 			point1.y = -point1.y;
 			point2.y = -point2.y;

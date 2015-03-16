@@ -25,7 +25,7 @@ namespace Ludum.Engine
 			if (Mouse.IsButtonPressed(Mouse.Button.Left))
 			{
 				Vector2i mouse = Mouse.GetPosition(Render.Window);
-				if (CheckCollisionPoint(this, Camera.Main.ScreenToWorldInvertedY(new Vector2f(mouse.X, mouse.Y))))
+				if (CheckCollisionPoint(this, Camera.Main.ScreenToWorld(new Vector2f(mouse.X, mouse.Y))))
 				{
 					foreach (var component in GameObject.Components)
 					{

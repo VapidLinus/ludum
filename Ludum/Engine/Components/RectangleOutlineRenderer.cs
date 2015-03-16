@@ -3,7 +3,7 @@ using System;
 
 namespace Ludum.Engine
 {
-	public class RectangleOutlineRenderer : Component, ISizable
+	public class RectangleOutlineRenderer : Component
 	{
 		private RectangleRenderer outline, mainshape;
 
@@ -20,28 +20,13 @@ namespace Ludum.Engine
 			get { return mainshape.Color; }
 			set { mainshape.Color = value; }
 		}
-		public Vector2 Size
-		{
-			get { return size; }
-			set
-			{
-				size = mainshape.Size = Vector2.Max(value, 0);
-				outline.Size = new Vector2(size.x + outlineWidth * 2, size.y + outlineWidth * 2);
-			}
-		}
-		private float rotation;
-		public float Rotation
-		{
-			get { return rotation; }
-			set { rotation = mainshape.Rotation = outline.Rotation = value; }
-		}
 		public double OutlineWidth
 		{
 			get { return outlineWidth; }
 			set
 			{
 				outlineWidth = Math.Max(0, value);
-				outline.Size = new Vector2(size.x + outlineWidth * 2, size.y + outlineWidth * 2);
+				outline.Transform.Scale = new Vector2(size.x + outlineWidth * 2, size.y + outlineWidth * 2);
 			}
 		}
 		public byte RenderLayer
@@ -65,12 +50,15 @@ namespace Ludum.Engine
 
 			OutlineColor = Color.Black;
 			MainColor = Color.White;
-			Size = Vector2.One;
 			OutlineWidth = .1;
 		}
 
 		public override void OnUpdate()
 		{
+			outline.Transform.Scale = Transform.Scale + new Vector2(OutlineWidth, OutlineWidth) * 2;
+			mainshape.Transform.Scale = Transform.Scale;
+
+			outline.Transform.Rotation = mainshape.Transform.Rotation = Transform.Rotation;
 			outline.Transform.Position = mainshape.Transform.Position = Transform.Position;
 		}
 
