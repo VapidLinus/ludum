@@ -91,6 +91,7 @@
     <Compile Include="Engine\Resources\ColorUtil.cs" />
     <Compile Include="Engine\Resources\Config.cs" />
     <Compile Include="Engine\Resources\Extentions\ExceptionExtensions.cs" />
+    <Compile Include="Engine\Resources\ISizable.cs" />
     <Compile Include="Engine\Resources\MathUtil.cs" />
     <Compile Include="Engine\Resources\Rectangle.cs" />
     <Compile Include="Engine\RenderMode.cs" />

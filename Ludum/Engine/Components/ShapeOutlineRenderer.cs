@@ -40,7 +40,6 @@ namespace Ludum.Engine
 				outline.SetPoints(points);
 			}
 		}
-
 		public byte RenderLayer
 		{
 			get { return mainshape.GameObject.RenderLayer; }
@@ -55,8 +54,8 @@ namespace Ludum.Engine
 
 		public override void OnAwake()
 		{
-			mainshape = new GameObject(Transform.Position).AddComponent<ShapeRenderer>();
-			outline = new GameObject(Transform.Position).AddComponent<ShapeRenderer>();
+			mainshape = new GameObject("ShapeOutline_Main", Transform.Position).AddComponent<ShapeRenderer>();
+			outline = new GameObject("ShapeOutline_Outline", Transform.Position).AddComponent<ShapeRenderer>();
 
 			RenderLayer = Render.DEFAULT_RENDER_LAYER - 10;
 

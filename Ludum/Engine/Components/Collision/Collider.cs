@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Ludum.Engine;
+using SFML.Window;
 
 namespace Ludum.Engine
 {
@@ -19,10 +20,29 @@ namespace Ludum.Engine
 		{
 			colliders.Remove(this);
 		}
+		public override void OnUpdate()
+		{
+			if (Mouse.IsButtonPressed(Mouse.Button.Left))
+			{
+				Vector2i mouse = Mouse.GetPosition(Render.Window);
+				if (CheckCollisionPoint(this, Camera.Main.ScreenToWorldInvertedY(new Vector2f(mouse.X, mouse.Y))))
+				{
+					foreach (var component in GameObject.Components)
+					{
+						component.OnClicked();
+					}
+				}
+			}
+		}
 
 		public Collision Overlap(Vector2 position)
 		{
 			return CheckCollision(this, position);
+		}
+
+		public HashSet<Collision> OverlapAll(Vector2 position)
+		{
+			return CheckCollisions(this, position);
 		}
 
 		#region Static
@@ -36,6 +56,17 @@ namespace Ludum.Engine
 			}
 			return null;
 		}
+		public static HashSet<Collider> CheckCollisions(Vector2 point)
+		{
+			var c = new HashSet<Collider>();
+			for (int i = 0; i < colliders.Count; i++)
+			{
+				var collider = colliders[i];
+				collider.ColliderPosition = collider.Transform.Position;
+				if (CheckCollisionPoint(collider, point)) c.Add(collider);
+			}
+			return c;
+		}
 
 		/// <summary>
 		/// Check if the specified collider is colliding with another.
@@ -45,6 +76,20 @@ namespace Ludum.Engine
 		public static Collision CheckCollision(Collider collider)
 		{
 			return CheckCollision(collider, collider.Transform.Position);
+		}
+
+		public static HashSet<Collision> CheckCollisions(Collider collider)
+		{
+			var c = new HashSet<Collision>();
+			for (int i = 0; i < colliders.Count; i++)
+			{
+				var entry = colliders[i];
+				entry.ColliderPosition = entry.Transform.Position;
+
+				Collision collision;
+				if ((collision = CheckCollision(collider, collider.Transform.Position)) != null) c.Add(collision);
+			}
+			return c;
 		}
 
 		/// <summary>
@@ -69,6 +114,22 @@ namespace Ludum.Engine
 			return null;
 		}
 
+		public static HashSet<Collision> CheckCollisions(Collider collider, Vector2 position)
+		{
+			collider.ColliderPosition = position;
+			var c = new HashSet<Collision>();
+			for (int i = 0; i < colliders.Count; i++)
+			{
+				var other = colliders[i];
+
+				if (collider == other) continue;
+				other.ColliderPosition = other.Transform.Position;
+				var result = CheckTwoColliders(collider, other);
+				if (result != null) c.Add(result);
+			}
+			return c;
+		}
+
 		#region Internal
 		private static Collision CheckTwoColliders(Collider c1, Collider c2)
 		{
@@ -87,18 +148,44 @@ namespace Ludum.Engine
 					(Vector2)direction,
 					(Vector2)direction * ((BoxCollider)c2).Rectangle.Size * .5 + c2.Transform.Position);
 			}
-			/*// Box vs Circle
+			// Box vs Circle
 			else if (type1 == typeof(BoxCollider) && type2 == typeof(CircleCollider))
-			{ return CheckBoxCircleCollision((BoxCollider)c1, (CircleCollider)c2); }
+			{
+				var box = (BoxCollider)c1;
+				var circle = (CircleCollider)c2;
+                if (CheckBoxCircleCollision(box, circle))
+				{
+					Vector2 direction = (box.Transform.Position - circle.Transform.Position).Normalized;
+                    Vector2 point = box.Rectangle.GetEdgeDirection(direction);
+					return new Collision(c2, direction, point);
+				}
+				return null;
+			}
 			else if (type1 == typeof(CircleCollider) && type2 == typeof(BoxCollider))
-			{ return CheckBoxCircleCollision((BoxCollider)c2, (CircleCollider)c1); }
+			{
+				var box = (BoxCollider)c2;
+				var circle = (CircleCollider)c1;
+				if (CheckBoxCircleCollision(box, circle))
+				{
+					Vector2 direction = (box.ColliderPosition - circle.ColliderPosition).Normalized;
+					Vector2 point = box.Rectangle.GetEdgeDirection(direction);
+					return new Collision(c2, direction, box.ColliderPosition + point);
+				}
+				return null;
+			}
 			// Circle vs Circle
 			else if (type1 == typeof(CircleCollider) && type2 == typeof(CircleCollider))
 			{
+				// TODO Optimize
 				double distanceSquared = (c1.ColliderPosition - c2.ColliderPosition).SquareMagnitude;
-				double combinedRadius = ((CircleCollider)c1).Radius + ((CircleCollider)c2).Radius;
-				return distanceSquared < combinedRadius * combinedRadius;
-			}*/
+				double combinedRadius = (((CircleCollider)c1).Radius + ((CircleCollider)c2).Radius) * .5;
+				Vector2 direction = (c2.ColliderPosition - c1.ColliderPosition).Normalized;
+                if (distanceSquared < combinedRadius * combinedRadius)
+				{
+					return new Collision(c2, direction, c1.ColliderPosition + direction * Math.Sqrt(distanceSquared));
+				}
+				return null;
+			}
 
 			// Not implemented :(
 			throw new NotImplementedException("Collision between " + type1 + " and " + type2 + " is not supported.");
@@ -128,14 +215,15 @@ namespace Ludum.Engine
 			// http://stackoverflow.com/questions/401847/circle-rectangle-collision-detection-intersection
 
 			var rectangle = box.Rectangle;
+			double radius = circle.Radius * .5;
 
 			// Absolute distance
-			double distanceX = Math.Abs(circle.ColliderPosition.x - box.ColliderPosition.x);
-			double distanceY = Math.Abs(circle.ColliderPosition.y - box.ColliderPosition.y);
+			double distanceX = Math.Abs(circle.ColliderPosition.x - box.ColliderPosition.x - rectangle.Size.x * .5);
+			double distanceY = Math.Abs(circle.ColliderPosition.y - box.ColliderPosition.y - rectangle.Size.y * .5);
 
 			// Check if outside (top left)
-			if (distanceX > rectangle.Size.x / 2.0 + circle.Radius ||
-				distanceY > rectangle.Size.y / 2.0 + circle.Radius) return false;
+			if (distanceX > rectangle.Size.x / 2.0 + radius ||
+				distanceY > rectangle.Size.y / 2.0 + radius) return false;
 
 			// Check if inside (bottom right)
 			if (distanceX < rectangle.Size.x / 2.0 ||
@@ -147,7 +235,7 @@ namespace Ludum.Engine
 
 			// Check if distance is lower than circle radius
 			// Don't use sqrt, but rather do radius^2 for performance
-			return x * x + y * y < circle.Radius * circle.Radius;
+			return x * x + y * y < radius * radius;
 		}
 		#endregion
 		#endregion

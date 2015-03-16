@@ -57,11 +57,12 @@ namespace Ludum.Engine
 				while (accumulator >= fixedDelta)
 				{
 					Application.Scene.StoreState();
-					input.Update();
 					time += delta;
+					input.Update();
 					Application.Scene.OnFixedUpdate();
 					accumulator -= fixedDelta;
-				}
+					OnFixedUpdate();
+                }
 
 				// Get alpha from fixed update
 				render.ReportFrameAlpha(accumulator / fixedDelta);
@@ -78,6 +79,7 @@ namespace Ludum.Engine
 
 				// Update
 				updateState = UpdateState.Update;
+				
 				Application.Scene.OnUpdate();
 				OnUpdate();
 
@@ -100,6 +102,7 @@ namespace Ludum.Engine
 
 		protected virtual void OnInitialize() { }
 		protected virtual void OnUpdate() { }
+		protected virtual void OnFixedUpdate() { }
 		protected virtual void OnRender() { }
 		protected virtual void OnExit() { }
 		protected virtual void OnLoadContent() { }

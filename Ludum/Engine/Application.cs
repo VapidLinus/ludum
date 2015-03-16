@@ -33,7 +33,7 @@ namespace Ludum.Engine
 		{
 			get
 			{
-				if (Instance.config == null) Instance.config = new Config(DataPath, "config.conf");
+				if (Instance.config == null) Instance.config = new Config(DataPath + "\\config.conf");
 				return Instance.config;
 			}
 		}

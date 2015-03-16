@@ -1,6 +1,6 @@
 ﻿namespace Ludum.Engine
 {
-	public class BoxCollider : Collider
+	public class BoxCollider : Collider, ISizable
 	{
 		private Rectangle rectangle = new Rectangle(Vector2.Zero, Vector2.One);
 

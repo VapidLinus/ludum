@@ -1,10 +1,9 @@
 ﻿using SFML.Graphics;
 using SFML.Window;
-using System;
 
 namespace Ludum.Engine
 {
-	public class RectangleRenderer : Component
+	public class RectangleRenderer : Component, ISizable
 	{
 		private RectangleShape shape;
 

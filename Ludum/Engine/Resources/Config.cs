@@ -7,14 +7,12 @@ namespace Ludum.Engine
 	public class Config
 	{
 		private readonly string path;
-		private readonly string filename;
 
 		private Dictionary<string, string> dictionary;
 
-		public Config(string path, string filename, bool load = true)
+		public Config(string path, bool load = true)
 		{
 			this.path = path;
-			this.filename = filename;
 
 			dictionary = new Dictionary<string, string>();
 
@@ -23,9 +21,11 @@ namespace Ludum.Engine
 
 		public void Save()
 		{
-			Directory.CreateDirectory(path);
+			/*string directory = Path.GetDirectoryName(path);
+			if (!Directory.Exists(directory))
+				Directory.CreateDirectory(path);*/
 
-			var writer = new StreamWriter(File.Open(Path.Combine(path, filename), FileMode.Create));
+			var writer = new StreamWriter(File.Open(path, FileMode.Create));
 			foreach (var pair in dictionary)
 			{
 				writer.WriteLine(pair.Key);
@@ -36,11 +36,20 @@ namespace Ludum.Engine
 
 		public void Load()
 		{
-			if (!File.Exists(path)) return;
+			if (!File.Exists(path))
+			{
+				Console.WriteLine("[Config] + Path not found: " + path);
+				return;
+			}
 
 			string[] lines = File.ReadAllLines(path);
 			for (int i = 0; i < lines.Length; i += 2)
 			{
+				if (dictionary.ContainsKey(lines[i]))
+				{
+					Console.WriteLine("Key already exists: " + lines[i]);
+					continue;
+				}
 				dictionary.Add(lines[i], lines[i + 1]);
 			}
 		}
@@ -59,13 +68,13 @@ namespace Ludum.Engine
 			return @default;
 		}
 
-		public void SetValue(string key, string value)
+		public void SetValue(string key, object value)
 		{
 			if (key == null) throw new ArgumentNullException("key");
 
 			// Add/Update value of key
-			if (dictionary.ContainsKey(key)) dictionary[key] = value;
-			else dictionary.Add(key, value);
+			if (dictionary.ContainsKey(key)) dictionary[key] = value.ToString();
+			else dictionary.Add(key, value.ToString());
 		}
 	}
 }

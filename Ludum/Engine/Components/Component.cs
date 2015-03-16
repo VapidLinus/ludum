@@ -22,5 +22,6 @@ namespace Ludum.Engine
 		protected Component() { }
 
 		public virtual void OnAwake() { }
+		public virtual void OnClicked() { }
 	}
 }

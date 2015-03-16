@@ -10,6 +10,8 @@ namespace Ludum.Engine
 		private readonly Dictionary<Component, bool> components;
 		private byte renderLayer = Render.DEFAULT_RENDER_LAYER;
 
+		public string Name { get; set; }
+
 		public byte RenderLayer
 		{
 			get { return renderLayer; }
@@ -34,11 +36,11 @@ namespace Ludum.Engine
 			set { Transform.Position = value; }
 		}
 
-		public GameObject() : this(Vector2.Zero) { }
-
-		public GameObject(Vector2 position)
+		public GameObject(string name, Vector2 position = new Vector2())
 		{
-			Transform = new Transform() { Position = position };
+			Name = name;
+
+			Transform = new Transform() { GameObject = this,  Position = position };
 			Transform.LastPosition = Transform.Position;
 			components = new Dictionary<Component, bool>();
 
@@ -58,6 +60,12 @@ namespace Ludum.Engine
 			return component;
 		}
 
+		public T GetOrAddComponent<T>() where T : Component, new()
+		{
+			T component = GetComponent<T>();
+			return component == null ? AddComponent<T>() : component;
+		}
+
 		public T GetComponent<T>() where T : Component
 		{
 			return Components.OfType<T>().Select(component => component as T).FirstOrDefault();
@@ -66,7 +74,7 @@ namespace Ludum.Engine
 		public override void OnFixedUpdate()
 		{
 			// Loop through all components
-			Dictionary<Component, bool> componentsClone = new Dictionary<Component, bool>(components); // Clone
+			Dictionary<Component, bool> componentsClone = new Dictionary<Component, bool>(components);	 // Clone
 			foreach (var pair in componentsClone)
 			{
 				var component = pair.Key;
@@ -78,8 +86,7 @@ namespace Ludum.Engine
 					component.OnStart();
 					components[component] = true;
 				}
-
-				component.OnFixedUpdate();
+				else component.OnFixedUpdate();
 			}
 		}
 
@@ -117,6 +124,16 @@ namespace Ludum.Engine
 
 			// Destroy component
 			components.Remove((Component)component);
+		}
+
+		public override string ToString()
+		{
+			return Name + instanceID;
+		}
+
+		public static T Create<T>(string name, Vector2 position = new Vector2()) where T : Component, new()
+		{
+			return new GameObject(name, position).AddComponent<T>();
 		}
 	}
 }

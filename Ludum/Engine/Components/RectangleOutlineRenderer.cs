@@ -3,7 +3,7 @@ using System;
 
 namespace Ludum.Engine
 {
-	public class RectangleOutlineRenderer : Component
+	public class RectangleOutlineRenderer : Component, ISizable
 	{
 		private RectangleRenderer outline, mainshape;
 
@@ -44,11 +44,22 @@ namespace Ludum.Engine
 				outline.Size = new Vector2(size.x + outlineWidth * 2, size.y + outlineWidth * 2);
 			}
 		}
-
-		public RectangleOutlineRenderer()
+		public byte RenderLayer
 		{
-			mainshape = new GameObject().AddComponent<RectangleRenderer>();
-			outline = new GameObject().AddComponent<RectangleRenderer>();
+			get { return mainshape.GameObject.RenderLayer; }
+			set
+			{
+				byte layer = MathUtil.Clamp(value, (byte)10, byte.MaxValue);
+
+				mainshape.GameObject.RenderLayer = layer;
+				outline.GameObject.RenderLayer = (byte)(layer - 10);
+			}
+		}
+
+		public override void OnAwake()
+		{
+			mainshape = new GameObject("RectangleOutline_Main", Transform.Position).AddComponent<RectangleRenderer>();
+			outline = new GameObject("RectangleOutline_Outline", Transform.Position).AddComponent<RectangleRenderer>();
 
 			outline.GameObject.RenderLayer = Render.DEFAULT_RENDER_LAYER - 10;
 

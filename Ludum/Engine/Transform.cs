@@ -16,6 +16,12 @@
 			internal set { lastPosition = value; }
 		}
 
+		public string Name
+		{
+			get { return GameObject.Name; }
+			set { GameObject.Name = value; }
+		}
+
 		public Vector2 RenderPosition
 		{
 			get { return position * Render.FrameAlpha + lastPosition * (1.0 - Render.FrameAlpha); }
@@ -23,5 +29,10 @@
 
 		private float rotation = 0;
 		public float Rotation { get { return rotation; } set { rotation = value; } }
+
+		public override string ToString()
+		{
+			return Name + GameObject.instanceID;
+		}
 	}
 }
