@@ -106,7 +106,7 @@
     <Compile Include="Engine\Core.cs" />
     <Compile Include="Engine\Resources\Vector2.cs" />
     <Compile Include="Engine\Scene.cs" />
-    <Compile Include="Engine\Transform.cs" />
+    <Compile Include="Engine\Components\Transform.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
