@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using SFML.Window;
+using XInputDotNetPure;
 
 /*
  * This could be optimized A LOT.
