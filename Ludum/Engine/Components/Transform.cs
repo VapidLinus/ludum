@@ -41,6 +41,16 @@
 			get { return position * Render.FrameAlpha + lastPosition * (1.0 - Render.FrameAlpha); }
 		}
 
+		public override void OnAwake()
+		{
+			LastPosition = Transform.position;
+		}
+
+		public override void OnStart()
+		{
+			LastPosition = Transform.position;
+		}
+
 		public override string ToString()
 		{
 			return Name + GameObject.instanceID;

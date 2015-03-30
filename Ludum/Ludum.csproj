@@ -90,7 +90,17 @@
     <Compile Include="Engine\Components\RectangleRenderer.cs" />
     <Compile Include="Engine\Components\RoundedBoxRenderer.cs" />
     <Compile Include="Engine\Components\ShapeRenderer.cs" />
+    <Compile Include="Engine\Debug.cs" />
     <Compile Include="Engine\Input.cs" />
+    <Compile Include="Engine\Resources\Resources.cs" />
+    <Compile Include="Engine\Resources\XInputAxis.cs" />
+    <Compile Include="Engine\Resources\XInputButton.cs" />
+    <Compile Include="Engine\UI\AbstractElement.cs" />
+    <Compile Include="Engine\UI\IElement.cs" />
+    <Compile Include="Engine\UI\Sprite.cs" />
+    <Compile Include="Engine\UI\GUI.cs" />
+    <Compile Include="Engine\UI\Text.cs" />
+    <Compile Include="Engine\XInputSystem.cs" />
     <Compile Include="Engine\InputSystem.cs" />
     <Compile Include="Engine\Resources\ColorUtil.cs" />
     <Compile Include="Engine\Resources\Config.cs" />

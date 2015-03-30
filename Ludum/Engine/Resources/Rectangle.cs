@@ -36,7 +36,7 @@ namespace Ludum.Engine
 			if (!direction.IsNormalized) direction.Normalize();
 			double magnitude = 0;
 
-			double angle = direction.ToAngle(direction);
+			double angle = Vector2.ToAngle(direction);
 			double absCosAngle = Math.Abs(Math.Cos(angle));
 			double absSinAngle = Math.Abs(Math.Sin(angle));
 

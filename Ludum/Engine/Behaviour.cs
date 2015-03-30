@@ -45,6 +45,7 @@
 		public virtual void OnStart() { }
 		public virtual void OnFixedUpdate() { }
 		public virtual void OnUpdate() { }
+		public virtual void OnLateUpdate() { }
 		public virtual void OnRender() { }
 		public virtual void OnDestroy() { }
 

@@ -7,7 +7,7 @@ namespace Ludum.Engine
 	public class Camera : Component
 	{
 		private double zoom = 100;
-		public double Zoom { get { return zoom; } set { zoom = Math.Max(value, Double.Epsilon); } }
+		public double Zoom { get { return zoom; } set { zoom = Math.Max(value, double.Epsilon); } }
 
 		/// <summary>
 		/// Finds a camera in the scene. Automatically caches.

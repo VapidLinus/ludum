@@ -91,16 +91,6 @@ namespace Ludum.Engine
 			}
 		}
 
-		/// <summary>
-		/// Converts the vector to an angle
-		/// </summary>
-		/// <param name="vector">Vector to convert</param>
-		/// <returns>Angle from vector</returns>
-		public double ToAngle(Vector2 vector)
-		{
-			return Math.Atan2(vector.y, vector.x);
-		}
-
 		public Vector2f ToVector2f()
 		{
 			return new Vector2f((float)x, (float)y);
@@ -192,9 +182,14 @@ namespace Ludum.Engine
 		public static Vector2 Right { get { return new Vector2(1, 0); } }
 		public static Vector2 Left { get { return new Vector2(-1, 0); } }
 
-		public static Vector2 FromAngle(float angle)
+		public static Vector2 FromAngle(double angle)
 		{
-			return new Vector2(Math.Cos(angle * Math.PI / 180.0), Math.Sin(angle * Math.PI / 180.0));
+			return new Vector2(Math.Cos(angle * 0.0174532925f), Math.Sin(angle * 0.0174532925f));
+		}
+
+		public static double ToAngle(Vector2 direction)
+		{
+			return Math.Atan2(direction.y, direction.x) * 57.2957795f;
 		}
 		public static double Distance(Vector2 v1, Vector2 v2)
 		{

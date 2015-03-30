@@ -14,7 +14,7 @@ namespace Ludum.Engine
 
 		// References
 		private readonly Core core;
-		private readonly RenderWindow window;
+		private RenderWindow window;
 
 		// Time
 		private double time = 0;
@@ -62,25 +62,47 @@ namespace Ludum.Engine
 				e.PrintStackTrace();
 			}
 
-			return isFullscreen ? Styles.Fullscreen : Styles.Close;
+			return isFullscreen ? Styles.Fullscreen : Styles.Resize | Styles.Close;
 		}
 
 		internal Render(Core core)
 		{
-			var renderMode = new RenderMode(LoadVideoMode(), "Ludum", LoadStyles());
-
-			ContextSettings settings = new ContextSettings();
-			settings.AntialiasingLevel = 4;
-
 			SetInstance(this);
 
 			this.core = core;
 
-			window = new RenderWindow(renderMode.videoMode, renderMode.title, renderMode.style, settings);
-			window.SetVerticalSyncEnabled(false);
-			window.Closed += (sender, e) => ((RenderWindow)sender).Close();
+			window = CreateNewWindow();
 
 			RebuildRenderOrder();
+		}
+
+		private RenderWindow CreateNewWindow()
+		{
+			VideoMode video = LoadVideoMode();
+
+			// If there was a previous window
+			if (window != null)
+			{
+				video = new VideoMode(window.Size.X, window.Size.Y, video.BitsPerPixel);
+				window.Close();
+			}
+
+			var renderMode = new RenderMode(video, "Ludum", LoadStyles());
+
+			ContextSettings settings = new ContextSettings();
+			settings.AntialiasingLevel = 4;
+
+			window = new RenderWindow(renderMode.videoMode, renderMode.title, renderMode.style, settings);
+
+			window.SetVerticalSyncEnabled(false);
+
+			window.Resized += (sender, e) =>
+			{
+				window = CreateNewWindow();
+			};
+			window.Closed += (sender, e) => ((RenderWindow)sender).Close();
+
+			return window;
 		}
 
 		internal void ReportDelta(double newDelta)

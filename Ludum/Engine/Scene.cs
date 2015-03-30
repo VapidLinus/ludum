@@ -98,6 +98,16 @@ namespace Ludum.Engine
 			}
 		}
 
+		public override void OnLateUpdate()
+		{
+			// Update
+			GameObject[] objects = GameObjects.ToArray();
+			for (int i = 0; i < objects.Length; i++)
+			{
+				objects[i].OnLateUpdate();
+			}
+		}
+
 		public override void OnRender()
 		{
 			

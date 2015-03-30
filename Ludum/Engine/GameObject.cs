@@ -99,12 +99,25 @@ namespace Ludum.Engine
 			}
 		}
 
+		public override void OnLateUpdate()
+		{
+			// Update components
+			foreach (var component in Components)
+			{
+				component.OnLateUpdate();
+			}
+		}
+
 		public override void OnRender()
 		{
 			// Render components
-			foreach (var component in Components)
+			foreach (var pair in components)
 			{
-				component.OnRender();
+				// Render if initialized
+				if (pair.Value)
+				{
+					pair.Key.OnRender();
+				}
 			}
 		}
 

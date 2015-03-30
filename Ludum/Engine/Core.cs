@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Ludum.UI;
+using System;
 using System.Diagnostics;
 
 namespace Ludum.Engine
 {
 	public abstract class Core
 	{
-
 		internal enum UpdateState
 		{
 			PreFrame,
@@ -18,6 +18,7 @@ namespace Ludum.Engine
 		private readonly Render render;
 		private readonly Application application;
 		private readonly Input input;
+		private readonly GUI gui;
 
 		internal double fixedDelta = 1 / 30.0;
 
@@ -26,17 +27,18 @@ namespace Ludum.Engine
 			application = new Application();
 			render = new Render(this);
 			input = new Input(this);
+			gui = new GUI();
 		}
 
 		public void Run()
 		{
 			// Load
-			Console.Write("Initializing... ");
+			Debug.Log("Initializing... ");
 			OnInitialize();
-			Console.WriteLine("Done!");
-			Console.Write("Loading content... ");
+			Debug.Log("Done!");
+			Debug.Log("Loading content... ");
 			OnLoadContent();
-			Console.WriteLine("Done!");
+			Debug.Log("Done!");
 
 			// Update
 			var timer = Stopwatch.StartNew();
@@ -71,7 +73,7 @@ namespace Ludum.Engine
 				if ((displayFPSTime += delta) >= .1)
 				{
 					displayFPSTime = 0;
-					Console.WriteLine("FPS: " + Render.SmoothFPS);
+					Debug.Log("FPS: " + Render.SmoothFPS);
 				}
 
 				// Handle window
@@ -82,6 +84,7 @@ namespace Ludum.Engine
 
 				input.Update();
 				Application.Scene.OnUpdate();
+				Application.Scene.OnLateUpdate();
 				OnUpdate();
 
 				// Render
@@ -89,6 +92,7 @@ namespace Ludum.Engine
 				Render.Window.Clear(new SFML.Graphics.Color(0, 150, 255));
 				render.RenderAll();
 				OnRender();
+				gui.Render();
 				Render.Window.Display();
 
 				updateState = UpdateState.PreFrame;
