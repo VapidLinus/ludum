@@ -191,13 +191,19 @@ namespace Ludum.Engine
 		{
 			return Math.Atan2(direction.y, direction.x) * 57.2957795f;
 		}
-		public static double Distance(Vector2 v1, Vector2 v2)
-		{
-			double x = v1.x - v2.x;
-			double y = v1.y - v2.y;
-			return Math.Sqrt(x * x + y * y);
-		}
-		public static Vector2 Clamp(Vector2 vector, double min, double max)
+        public static double Distance(Vector2 v1, Vector2 v2)
+        {
+            double x = v1.x - v2.x;
+            double y = v1.y - v2.y;
+            return Math.Sqrt(x * x + y * y);
+        }
+        public static double DistanceSquare(Vector2 v1, Vector2 v2)
+        {
+            double x = v1.x - v2.x;
+            double y = v1.y - v2.y;
+            return x * x + y * y;
+        }
+        public static Vector2 Clamp(Vector2 vector, double min, double max)
 		{
 			return new Vector2(MathUtil.Clamp(vector.x, min, max), MathUtil.Clamp(vector.y, min, max)); ;
 		}

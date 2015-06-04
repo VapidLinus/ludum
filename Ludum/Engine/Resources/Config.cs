@@ -38,7 +38,7 @@ namespace Ludum.Engine
 		{
 			if (!File.Exists(path))
 			{
-				Console.WriteLine("[Config] + Path not found: " + path);
+				Debug.LogWarning("[Config] Path not found: " + path);
 				return;
 			}
 
@@ -47,7 +47,7 @@ namespace Ludum.Engine
 			{
 				if (dictionary.ContainsKey(lines[i]))
 				{
-					Console.WriteLine("Key already exists: " + lines[i]);
+					Debug.LogWarning("Key already exists: " + lines[i]);
 					continue;
 				}
 				dictionary.Add(lines[i], lines[i + 1]);

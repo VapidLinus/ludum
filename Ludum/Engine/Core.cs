@@ -35,7 +35,6 @@ namespace Ludum.Engine
 			// Load
 			Debug.Log("Initializing... ");
 			OnInitialize();
-			Debug.Log("Done!");
 			Debug.Log("Loading content... ");
 			OnLoadContent();
 			Debug.Log("Done!");
@@ -43,7 +42,6 @@ namespace Ludum.Engine
 			// Update
 			var timer = Stopwatch.StartNew();
 			double time = 0;
-			double displayFPSTime = 0;
 
 			double accumulator = 0;
 			while (Render.Window.IsOpen())
@@ -69,13 +67,6 @@ namespace Ludum.Engine
 				// Get alpha from fixed update
 				render.ReportFrameAlpha(accumulator / fixedDelta);
 
-				// Display fps
-				if ((displayFPSTime += delta) >= .1)
-				{
-					displayFPSTime = 0;
-					Debug.Log("FPS: " + Render.SmoothFPS);
-				}
-
 				// Handle window
 				Render.Window.DispatchEvents();
 
@@ -84,6 +75,7 @@ namespace Ludum.Engine
 
 				input.Update();
 				Application.Scene.OnUpdate();
+				gui.Update();
 				Application.Scene.OnLateUpdate();
 				OnUpdate();
 

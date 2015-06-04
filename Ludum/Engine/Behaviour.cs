@@ -84,9 +84,30 @@
 			if (b1Null) return b2.IsDestroyed;
 			else return b1.IsDestroyed;
 		}
+
+		public static bool operator ==(Behaviour b1, bool b2)
+		{
+			return (b1 != null) == b2;
+		}
+
+		public static bool operator !=(Behaviour b1, bool b2)
+		{
+			return (b1 == null) == b2;
+		}
+
 		public static bool operator !=(Behaviour b1, Behaviour b2)
 		{
 			return !(b1 == b2);
+		}
+
+		public static bool operator true(Behaviour b1)
+		{
+			return b1 == true;
+		}
+
+		public static bool operator false(Behaviour b1)
+		{
+			return b1 == false;
 		}
 	}
 }

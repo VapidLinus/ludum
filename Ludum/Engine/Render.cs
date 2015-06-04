@@ -15,6 +15,7 @@ namespace Ludum.Engine
 		// References
 		private readonly Core core;
 		private RenderWindow window;
+		private bool fullscreen;
 
 		// Time
 		private double time = 0;
@@ -36,6 +37,11 @@ namespace Ludum.Engine
 			uint width = 800;
 			uint height = 450;
 
+			if (fullscreen)
+			{
+				return VideoMode.DesktopMode;
+			}
+
 			try
 			{
 				width = uint.Parse(Application.Config.GetValue("screen-resolution-x", "800"));
@@ -51,18 +57,7 @@ namespace Ludum.Engine
 
 		private Styles LoadStyles()
 		{
-			bool isFullscreen = false;
-
-			try
-			{
-				isFullscreen = bool.Parse(Application.Config.GetValue("screen-resolution-fullscreen", "false"));
-			}
-			catch (Exception e)
-			{
-				e.PrintStackTrace();
-			}
-
-			return isFullscreen ? Styles.Fullscreen : Styles.Resize | Styles.Close;
+			return fullscreen ? Styles.Fullscreen : Styles.Titlebar | Styles.Close;
 		}
 
 		internal Render(Core core)
@@ -78,16 +73,23 @@ namespace Ludum.Engine
 
 		private RenderWindow CreateNewWindow()
 		{
+			try
+			{
+				fullscreen = bool.Parse(Application.Config.GetValue("screen-resolution-fullscreen", "false"));
+			}
+			catch (Exception e) { e.PrintStackTrace(); }
+
 			VideoMode video = LoadVideoMode();
+			Debug.Log("Video Mode: " + video);
 
 			// If there was a previous window
 			if (window != null)
 			{
-				video = new VideoMode(window.Size.X, window.Size.Y, video.BitsPerPixel);
 				window.Close();
 			}
 
 			var renderMode = new RenderMode(video, "Ludum", LoadStyles());
+			Debug.Log("Style Mode: " + renderMode.style);
 
 			ContextSettings settings = new ContextSettings();
 			settings.AntialiasingLevel = 4;
@@ -95,11 +97,10 @@ namespace Ludum.Engine
 			window = new RenderWindow(renderMode.videoMode, renderMode.title, renderMode.style, settings);
 
 			window.SetVerticalSyncEnabled(false);
-
-			window.Resized += (sender, e) =>
+			/*window.Resized += (sender, e) =>
 			{
 				window = CreateNewWindow();
-			};
+			};*/
 			window.Closed += (sender, e) => ((RenderWindow)sender).Close();
 
 			return window;
@@ -124,7 +125,7 @@ namespace Ludum.Engine
 			// If render list needs to be rebuilt
 			if (isRenderListDirty)
 			{
-				isRenderListDirty = false; // No longer dirty
+				isRenderListDirty = false;   // No longer dirty
 
 				// Prepare sort
 				List<GameObject> objects = new List<GameObject>(Application.Scene.GameObjects);
@@ -155,6 +156,19 @@ namespace Ludum.Engine
 		internal static void RebuildRenderOrder()
 		{
 			Instance.isRenderListDirty = true;
+		}
+
+		public static bool Fullscreen
+		{
+			get
+			{
+				return Instance.fullscreen;
+			}
+			set
+			{
+				Application.Config.SetValue("screen-resolution-fullscreen", value);
+				Instance.CreateNewWindow();
+			}
 		}
 
 		public static int FPS { get { return (int)Math.Round(Instance.fpsSamples[Instance.fpsCurrentSample]); } }

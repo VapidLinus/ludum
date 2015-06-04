@@ -11,6 +11,13 @@ namespace Ludum.Engine
 			get { return shape.FillColor; }
 			set { shape.FillColor = value; }
 		}
+		public Texture Texture
+		{
+			get { return shape.Texture; }
+			set { shape.Texture = value; }
+		}
+		private bool visible = true;
+		public bool Visible { get { return visible; } set { visible = value; } }
 
 		public override void OnAwake()
 		{
@@ -19,7 +26,7 @@ namespace Ludum.Engine
 
 		public override void OnRender()
 		{
-			if (Camera.Main == null || !IsOnScreen()) return;
+			if (!visible || Camera.Main == null || !IsOnScreen()) return;
 
 			float zoom = (float)Camera.Main.Zoom;
 
@@ -30,6 +37,11 @@ namespace Ludum.Engine
 			shape.Position = Camera.Main.WorldToScreen(Transform.RenderPosition);
 
 			Render.Window.Draw(shape);
+		}
+
+		public override void OnDestroy()
+		{
+			shape.Dispose();
 		}
 
 		bool IsOnScreen()

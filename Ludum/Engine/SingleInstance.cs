@@ -5,11 +5,11 @@ namespace Ludum.Engine
 	public abstract class SingleInstance<T> where T : SingleInstance<T>
 	{
 		private static T instance;
-		protected static T Instance 
+		internal static T Instance 
 		{
 			get 
 			{
-				if (instance == null) throw new InvalidOperationException("Not initliazed");
+				if (instance == null) throw new InvalidOperationException("Not initialized");
 				return instance;
 			}
 		}

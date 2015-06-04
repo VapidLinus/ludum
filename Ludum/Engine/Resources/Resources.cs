@@ -1,4 +1,5 @@
-﻿using SFML.Graphics;
+﻿using SFML.Audio;
+using SFML.Graphics;
 using System.Collections.Generic;
 
 namespace Ludum.Engine
@@ -7,6 +8,7 @@ namespace Ludum.Engine
 	{
 		private static Dictionary<string, Texture> textures = new Dictionary<string, Texture>();
 		private static Dictionary<string, Font> fonts = new Dictionary<string, Font>();
+        private static Dictionary<string, SoundBuffer> sounds = new Dictionary<string, SoundBuffer>();
 
 		public static Texture LoadTexture(string path, bool smooth = false)
 		{
@@ -20,15 +22,30 @@ namespace Ludum.Engine
 			return clone;
 		}
 
-		public static Font LoadFont(string path)
+        public static Font LoadFont(string path)
+        {
+            bool exists = fonts.ContainsKey(path);
+
+            Font original = exists ? fonts[path] : new Font(path);
+            if (!exists) fonts.Add(path, original);
+            Font clone = new Font(original);
+
+            return clone;
+        }
+
+        public static Music LoadMusic(string path)
+        {
+            return new Music(path);
+        }
+
+        public static Sound LoadSound(string path)
 		{
-			bool exists = fonts.ContainsKey(path);
+			bool exists = sounds.ContainsKey(path);
 
-			Font original = exists ? fonts[path] : new Font(path);
-			if (!exists) fonts.Add(path, original);
-			Font clone = new Font(original);
+			SoundBuffer buffer = exists ? sounds[path] : new SoundBuffer(path);
+			if (!exists) sounds.Add(path, buffer);
 
-			return clone;
+			return new Sound(buffer);
 		}
 	}
 }
