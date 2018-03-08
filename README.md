@@ -1,8 +1,7 @@
-Ludum
+Ludum Game Engine
 =====
+A rushed game-engine for a school project.
 
-School project
-
-We're supposed to create an engine and then make game using it, or something like that. Idek
+Buggy and messy! Leaving it up for future reference (so I can laugh at how crap my code for this was).
 
 Built on: http://www.sfml-dev.org/download/sfml.net/
